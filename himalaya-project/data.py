@@ -18,7 +18,7 @@ class Data:
         # Use os library for Unix vs. Widowns robustness
         xls_path = os.path.join(root_dir, 'data')
 
-        file_names = [f for f in os.listdir(csv_path) if f.endswith('.xls')]
+        file_names = [f for f in os.listdir(xls_path) if f.endswith('.xls')]
 
         def key_from_file_name(f):
             if f[-4:] == '.xls':
