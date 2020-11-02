@@ -19,3 +19,4 @@ scikit-learn
 streamlit
 hereby
 gensim
+xlrd
