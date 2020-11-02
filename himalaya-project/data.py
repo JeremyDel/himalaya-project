@@ -21,12 +21,10 @@ class Data:
         file_names = [f for f in os.listdir(csv_path) if f.endswith('.xls')]
 
         def key_from_file_name(f):
-            if f[:-4] == '.xls':
-                return f[-4:]
+            if f[-4:] == '.xls':
+                return f[:-4]
 
-        # Create the dictionary
+ # Create the dictionary
         data = {}
         for f in file_names:
             data[key_from_file_name(f)] = pd.read_excel(os.path.join(xls_path, f))
-
-        return data
