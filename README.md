@@ -1,10 +1,24 @@
 # Data analysis
 - Document here the project: himalaya-project
-- Description: Project Description
-- Data Source:
-- Type of analysis:
 
-Please document the project the better you can.
+- Description: Machine learning project and data visualization
+
+- Data Source:
+Elizabeth Hawley (1923 – 2018) was an American journalist, author, and chronicler of Himalayan mountaineering expeditions.
+
+Hawley's The Himalayan Database became the unofficial record for climbs in the Nepalese Himalaya.
+
+The Himalayan Database contains data over:
+
+  2004 - to date
+  Peaks 450+
+  Expeditions 10.000+
+  Members 80.000+
+
+
+- Type of analysis:
+This project will focus on predicting the expeditions’ success based on our machine learning algorithm and predicting the number of summiters using time-series
+
 
 # Stratup the project
 
@@ -41,8 +55,8 @@ Functionnal test with a script:
   $ himalaya-project-run
 ```
 # Install
-Go to `gitlab.com/{group}/himalaya-project` to see the project, manage issues,
-setup you ssh public key, ...
+Go to `gitlab.com/{JeremyDel}/himalaya-project` to see the project, manage issues,
+
 
 Create a python3 virtualenv and activate it:
 ```bash
@@ -66,5 +80,6 @@ Functionnal test with a script:
 # Continus integration
 ## Github 
 Every push of `master` branch will execute `.github/workflows/pythonpackages.yml` docker jobs.
+
 ## Gitlab
 Every push of `master` branch will execute `.gitlab-ci.yml` docker jobs.
