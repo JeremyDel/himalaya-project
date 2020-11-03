@@ -20,7 +20,7 @@ class Expeds(object):
             data[key_from_file_name(f)] = pd.read_excel(os.path.join(xls_path, f))
 
         data = data['expeds']
-        
+
         return data
 
     def clean_data(self, df):
@@ -60,7 +60,7 @@ class Expeds(object):
         df['sponsor'] = df['sponsor'].map(no_sponsor)
         df['agency'] = df['agency'].map(no_sponsor)
 
-        df['termnote'] = df['termnote'].map({
+        df['term_note'] = df['term_note'].map({
             0 : 'Unknown',
             1 : 'Success_main',
             2 : 'Success_sub',
