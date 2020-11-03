@@ -3,7 +3,7 @@ import pandas as pd
 import re
 
 class Expeds(object):
-    
+
     def __init__():
 
     def get_data(self):
@@ -30,20 +30,6 @@ class Expeds(object):
 
         
         ## defining some definitions for the cleaning 
-
-        def ascent_cleaning(x):
-            if x == '1' or x == '1st offical' or x == '1st official' or x == '1st?':
-                return '1st'
-            if x == '2nd ascent' or x == '2nd official' or x == '2nd ascent':
-                return '2nd'
-            if x == '3rd?':
-                return '3rd'
-            if x == '4th,5th':
-                return '4th'
-            if x == '5th?':
-                return '5th'
-            return x
-        
         def numbers(x):
             if type(x) == str:
                 return int(re.findall(r"\d*", x)[0])
@@ -62,13 +48,15 @@ class Expeds(object):
         def no_route(x):
             if x == float('nan'): 
                 return 'other' 
+            return x
 
 
         ## Applying functions to the specific columns    
         df['ascent1'].fillna(0, inplace=True)
         df['ascent1'] = df['ascent1'].map(numbers)
-        df['route1'] = df['route1'].map(no_route)
-        df['route2'] = df['route2'].map(no_route)
+
+        df['route1'].fillna('other', inplace = True)
+        df['route2'].fillna('other', inplace = True)
 
         df['achievment'].fillna(0, inplace=True)
         df['achievment'] = df['achievment'].map(true)
