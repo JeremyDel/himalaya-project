@@ -22,11 +22,8 @@ class Expeds(object):
         data = data['members']
         return data
 
-    def clean_expeds(self):
-        df = get_data()
-        df = df.copy()
+    def clean_data(self, df):
 
-        
         ## defining some definitions for the cleaning 
         def numbers(x):
             if type(x) == str:
