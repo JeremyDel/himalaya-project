@@ -10,7 +10,7 @@ class Peaks:
 
     def get_data(self):
         """
-        This function get the data from the csv file and return a DataFrame.
+        This  function get the data from the csv file and return a DataFrame.
         """
         root_dir = os.path.abspath('')
         xls_path = os.path.join(root_dir, 'data')
