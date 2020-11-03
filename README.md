@@ -1,3 +1,9 @@
+# Project Management
+- https://trello.com/invite/b/B6UFlhf7/be72b5e325d221862dd493463272353e/le-wagon-project
+
+# Himalayan Database Guide 
+https://lewagon-alumni.slack.com/files/U01ATA2KLUC/F01E7AMVB7T/himalayan_database_guide__jul_2020___complete_.pdf
+
 # Data analysis
 - Document here the project: himalaya-project
 
@@ -75,10 +81,10 @@ Functionnal test with a script:
 ```bash
   $ cd /tmp
   $ himalaya-project-run
-``` 
+```
 
 # Continus integration
-## Github 
+## Github
 Every push of `master` branch will execute `.github/workflows/pythonpackages.yml` docker jobs.
 
 ## Gitlab
