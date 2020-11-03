@@ -1,10 +1,11 @@
 import datetime
 import os
 import pandas as pd
+import numpy as np
 from wwo_hist import retrieve_hist_data
 
 class Weather:
-    """
+
     def get_data_from_wwo(self):
         frequency=1
         start_date = '01-JAN-2010'
@@ -31,7 +32,7 @@ class Weather:
 
         # Use os library for Unix vs. Widowns robustness
         xls_path = os.path.join(root_dir, 'data')
-        print(xls_path + "/weather_lobuche.csv")"""
+        print(xls_path + "/weather_lobuche.csv")
 
 
 
@@ -41,42 +42,44 @@ class Weather:
         Clean the DataFrame weather
         """
 
+        # Select the feature in Integer
         feature_int = ['maxtempC', 'mintempC', 'uvIndex', 'moon_illumination',
                'DewPointC', 'FeelsLikeC', 'HeatIndexC', 'WindChillC',
                'WindGustKmph', 'cloudcover', 'humidity', 'pressure',
                'tempC', 'visibility', 'winddirDegree', 'windspeedKmph']
 
+        # Select the feature in Float
         feature_float = ['totalSnow_cm', 'sunHour', 'precipMM']
 
+        # Transform the features in the correct types
         data[feature_int] = data[feature_int].astype(int)
         data[feature_float] = data[feature_float].astype(float)
         data['date_time'] = pd.to_datetime(data['date_time'])
 
+        # Drop the features location
+        # Always the same value (Lobuche)
         data = data.drop(columns='location')
 
+
+
+        # Propagate last valid observation forward.
+        data['moonrise'].replace('No moonrise', np.nan, inplace=True)
+        data.ffill(axis=0, inplace=True)
+
+        data['moonset'].replace('No moonset', np.nan, inplace=True)
+        data.ffill(axis=0, inplace=True)
+
+        data['sunrise'].replace('No sunrise', np.nan, inplace=True)
+        data.ffill(axis=0, inplace=True)
+
+        data['sunset'].replace('No sunset', np.nan, inplace=True)
+        data.ffill(axis=0, inplace=True)
+
+        # Convert the feature date_time to date and in string
         date_time_str = data['date_time'].dt.strftime('%Y-%m-%d')
 
-        tab = []
-        for i in range(len(data)):
-            if data.iloc[i]['moonrise'] == 'No moonrise':
-                tab.append(tab[-1])
-            else:
-                tab.append(data.iloc[i]['moonrise'])
-
-        data['moonrise'] = tab
-
-
-        tab = []
-        for i in range(len(data)):
-            if data.iloc[i]['moonset'] == 'No moonset':
-                tab.append(tab[-1])
-            else:
-                tab.append(data.iloc[i]['moonset'])
-
-        data['moonset'] = tab
-
-
-
+        # Convert the this 4 features to date_time
+        # "moonrise", "moonset", "sunrise", "sunset"
         data['moonrise'] = pd.to_datetime(date_time_str + " " + data['moonrise'])
         data['moonset'] = pd.to_datetime(date_time_str + " " + data['moonset'])
         data['sunrise'] = pd.to_datetime(date_time_str + " " + data['sunrise'])
