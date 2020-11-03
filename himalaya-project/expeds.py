@@ -60,7 +60,7 @@ class Expeds(object):
         df['sponsor'] = df['sponsor'].map(no_sponsor)
         df['agency'] = df['agency'].map(no_sponsor)
 
-        df['term_note'] = df['term_note'].map({
+        df['term_reason'] = df['term_reason'].map({
             0 : 'Unknown',
             1 : 'Success_main',
             2 : 'Success_sub',
@@ -77,6 +77,8 @@ class Expeds(object):
             13 : 'Attempt_rumored',
             14 : "Other"})
 
+        
+       
 
         ## dropping 
         df.drop(columns=['route3', 'route4', 
@@ -106,7 +108,8 @@ class Expeds(object):
             1 : 'Nepal',
             2 : 'China',
             3 : 'India'})
-
+        
+        df['summit_time'] = df['summit_time'].astype(int)
         return df
 
 if __name__ == "__main__":
