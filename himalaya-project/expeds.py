@@ -3,6 +3,9 @@ import pandas as pd
 import re
 
 class Expeds(object):
+    
+    def __init__():
+
     def get_data(self):
         """
         This function get the data from the csv file and return a DataFrame.
