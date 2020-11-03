@@ -89,3 +89,10 @@ class Weather:
         data['sunset'] = pd.to_datetime(date_time_str + " " + data['sunset'])
 
         return data
+if __name__ == "__main__":
+    weather_clean =  Weather().get_data()
+    weather_clean = Weather().clean_data(weather_clean)
+    root_dir = os.path.abspath('')
+    to_data = os.path.join(root_dir, 'data','clean')
+    to_path= os.path.join(to_data, 'clean')
+    weather_clean.to_csv(to_data+'weather_clean.csv')
