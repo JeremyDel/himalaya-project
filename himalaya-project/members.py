@@ -32,6 +32,8 @@ class Members:
         """
         data = df.copy()
 
+        data['unique_id'] = data['exp_id'] + '_' + data['memb_id'].astype(str)
+
         col_to_drop = ['first_name',
                'last_name',
                'age',
