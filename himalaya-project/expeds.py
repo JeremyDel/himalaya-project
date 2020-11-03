@@ -4,8 +4,6 @@ import re
 
 class Expeds(object):
 
-    def __init__():
-
     def get_data(self):
         """
         This function get the data from the csv file and return a DataFrame.
@@ -83,10 +81,32 @@ class Expeds(object):
 
 
         ## dropping 
-        df.drop(columns=['route3', 'route4', 'ascent3', 'ascent4', 'ascent3','approach'],  inplace = True)
+        df.drop(columns=['route3', 'route4', 
+        'ascent3', 
+        'ascent4', 
+        'ascent3',
+        'approach', 
+        'primref', 
+        'primid',
+        'chksum', 
+        'success3',
+        'success4'],  inplace = True)
         
         ## Filling with zeros because its makes sense
         df['summit_time'].fillna(0, inplace=True)
         df['other_smts'].fillna(0, inplace=True)
+
+        df['season'] = df['season'].map({
+                        0 : 'Unknown',
+                        1 : 'Spring',
+                        2 : 'Summer',
+                        3 : 'Autumn',
+                        4 : 'Winter'})
+
+        df['host'] =  df['host'].map({
+            0 : 'Unknown',
+            1 : 'Nepal',
+            2 : 'China',
+            3 : 'India'})
 
         return df
