@@ -19,7 +19,8 @@ class Expeds(object):
         for f in file_names:
             data[key_from_file_name(f)] = pd.read_excel(os.path.join(xls_path, f))
 
-        data = data['members']
+        data = data['expeds']
+        
         return data
 
     def clean_data(self, df):
@@ -107,3 +108,10 @@ class Expeds(object):
             3 : 'India'})
 
         return df
+
+if __name__ == "__main__":
+    expeds_clean =  Expeds().get_data()
+    expeds_clean = Expeds().clean_data(expeds_clean)
+    root_dir = os.path.abspath('')
+    to_path = os.path.join(root_dir, 'data', 'clean')
+    expeds_clean.to_csv(to_path)
