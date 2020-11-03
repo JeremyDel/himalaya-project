@@ -143,10 +143,12 @@ class Members:
         data['age'] = now_year - data['yob']
 
         return data
+
         
 if __name__ == "__main__":
     members_clean =  Members().get_data()
     members_clean = Members().clean_data(members_clean)
     root_dir = os.path.abspath('')
-    to_path = os.path.join(root_dir, 'data', 'clean')
-    members_clean.to_csv(to_path)
+    to_data = os.path.join(root_dir, 'data', 'clean')
+    to_path= os.path.join(to_data, 'clean')
+    members_clean.to_csv(to_path+'members_clean.csv')

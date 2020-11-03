@@ -113,5 +113,6 @@ if __name__ == "__main__":
     expeds_clean =  Expeds().get_data()
     expeds_clean = Expeds().clean_data(expeds_clean)
     root_dir = os.path.abspath('')
-    to_path = os.path.join(root_dir, 'data', 'clean')
-    expeds_clean.to_csv(to_path)
+    to_data = os.path.join(root_dir, 'data','clean')
+    to_path= os.path.join(to_data, 'clean')
+    expeds_clean.to_csv(to_data+'expeds_clean.csv')
