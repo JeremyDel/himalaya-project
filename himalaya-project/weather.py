@@ -25,16 +25,20 @@ class Weather:
         data = pd.DataFrame(hist_weather_data[0])
         return data
 
-    def get_data_from_csv(self):
-        # Find the absolute path for the root dir (04-Decision-Science)
-        # Uses __file__ as absolute path anchor
+
+    def get_data(self):
+        """
+        This function get the data from the csv file and return a DataFrame.
+        """
         root_dir = os.path.abspath('')
+        csv_path = os.path.join(root_dir, 'data')
+        file_names = [f for f in os.listdir(csv_path) if f.endswith('.csv')]
 
-        # Use os library for Unix vs. Widowns robustness
-        xls_path = os.path.join(root_dir, 'data')
-        print(xls_path + "/weather_lobuche.csv")
+        for f in file_names:
+            if f == 'weather_lobuche.csv':
+                data = pd.read_csv(os.path.join(csv_path, f))
 
-
+        return data
 
     def clean_data(self, data):
         """
