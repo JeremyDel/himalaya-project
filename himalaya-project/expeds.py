@@ -25,6 +25,8 @@ class Expeds(object):
 
     def clean_data(self, df):
 
+        df = df.copy()
+
         ## defining some definitions for the cleaning 
         def numbers(x):
             if type(x) == str:
@@ -57,8 +59,7 @@ class Expeds(object):
         df['achievment'].fillna(0, inplace=True)
         df['achievment'] = df['achievment'].map(true)
 
-        df['sponsor'] = df['sponsor'].map(no_sponsor)
-        df['agency'] = df['agency'].map(no_sponsor)
+        
 
         df['term_reason'] = df['term_reason'].map({
             0 : 'Unknown',
@@ -78,11 +79,12 @@ class Expeds(object):
             14 : "Other"})
 
         
-       
+        df['sponsor'].fillna('None', inplace=True)
+        df['agency'].fillna('None', inplace=True)
 
         ## dropping 
         df.drop(columns=['route3', 'route4', 
-        'ascent3', 
+        'ascent2', 
         'ascent4', 
         'ascent3',
         'approach', 
@@ -91,7 +93,7 @@ class Expeds(object):
         'chksum', 
         'success3',
         'success4'],  inplace = True)
-        
+                
         ## Filling with zeros because its makes sense
         df['summit_time'].fillna(0, inplace=True)
         df['other_smts'].fillna(0, inplace=True)
@@ -110,12 +112,14 @@ class Expeds(object):
             3 : 'India'})
         
         df['summit_time'] = df['summit_time'].astype(int)
+
         return df
 
 if __name__ == "__main__":
     expeds_clean =  Expeds().get_data()
     expeds_clean = Expeds().clean_data(expeds_clean)
-    root_dir = os.path.abspath('')
-    to_data = os.path.join(root_dir, 'data','clean')
-    to_path= os.path.join(to_data, 'clean')
-    expeds_clean.to_csv(to_data+'expeds_clean.csv')
+    # root_dir = os.path.abspath('')
+    # to_data = os.path.join(root_dir, 'data','clean')
+    # to_path= os.path.join(to_data, 'clean')
+    # expeds_clean.to_csv(to_data+'expeds_clean.csv')
+    print(expeds_clean.isnull().sum())
