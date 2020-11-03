@@ -8,10 +8,30 @@ import pandas as pd
 
 class Members:
 
-    def get_data(self, data):
+    def get_data(self):
         """
-        This function returns a Python DataFrame.
+        This function get the data from the csv file and return a DataFrame.
         """
+        root_dir = os.path.abspath('')
+        xls_path = os.path.join(root_dir, 'data')
+        file_names = [f for f in os.listdir(xls_path) if f.endswith('.xls')]
+
+        def key_from_file_name(f):
+            if f[-4:] == '.xls':
+                return f[:-4]
+        data = {}
+        for f in file_names:
+            data[key_from_file_name(f)] = pd.read_excel(os.path.join(xls_path, f))
+
+        data = data['members']
+        return data
+
+    def clean_data(self, df):
+        """
+        This function takes a DataFrame and returns a clean DataFrame.
+        """
+        data = df.copy()
+
         col_to_drop = ['first_name',
                'last_name',
                'age',
