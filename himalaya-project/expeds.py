@@ -74,20 +74,20 @@ class Expeds(object):
         df['agency'] = df['agency'].map(no_sponsor)
 
         df['termnote'] = df['termnote'].map({
-            0 : 'Unknown'
-            1 : 'Success_main'
-            2 : 'Success_sub'
-            3 : 'Success_claim'
-            4 : 'Bad_weather'
-            5 : 'Bad_conditions'
-            6 : 'Accident'
-            7 : 'Illness'
-            8 : 'Lack_sse'
-            9 : 'Lack_time'
-            10 : 'lack_of_motivation'
-            11 : 'no_reach_camp'
-            12 : 'no_attempt_climb'
-            13 : 'Attempt_rumored'
+            0 : 'Unknown',
+            1 : 'Success_main',
+            2 : 'Success_sub',
+            3 : 'Success_claim',
+            4 : 'Bad_weather',
+            5 : 'Bad_conditions',
+            6 : 'Accident',
+            7 : 'Illness',
+            8 : 'Lack_sse',
+            9 : 'Lack_time',
+            10 : 'lack_of_motivation',
+            11 : 'no_reach_camp',
+            12 : 'no_attempt_climb',
+            13 : 'Attempt_rumored',
             14 : "Other"})
 
 
