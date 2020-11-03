@@ -6,8 +6,7 @@ from wwo_hist import retrieve_hist_data
 
 class Weather:
 
-    def get_data_from_wwo(self):
-        frequency=1
+    def get_data_from_wwo(self, frequency=24):
         start_date = '01-JAN-2010'
         end_date = '01-NOV-2020'
         api_key = 'API KEYS!'
