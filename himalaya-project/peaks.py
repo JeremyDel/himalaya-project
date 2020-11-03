@@ -95,3 +95,10 @@ class Peaks:
 
 
         return data
+if __name__ == "__main__":
+    peaks_clean =  Peaks().get_data()
+    peaks_clean = Peaks().clean_data(peaks_clean)
+    root_dir = os.path.abspath('')
+    to_data = os.path.join(root_dir, 'data','clean')
+    to_path= os.path.join(to_data, 'clean')
+    peaks_clean.to_csv(to_data+'peaks_clean.csv')
