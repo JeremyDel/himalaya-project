@@ -119,9 +119,6 @@ class Members:
 
         data['summit_date1'] = pd.to_datetime(data.summit_date1, errors = 'coerce')
 
-        le = LabelEncoder()
-        data['sex'] = le.fit_transform(data['sex'])
-
         # Combine "age_transformer" and "One hot encoder" into a single preprocessor
         preprocessor = ColumnTransformer([
             ('median', SimpleImputer(strategy='median'), ['yob']),
