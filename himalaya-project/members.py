@@ -5,6 +5,7 @@ from sklearn.compose import ColumnTransformer
 import datetime
 import os
 import pandas as pd
+import numpy as np
 
 class Members:
 
