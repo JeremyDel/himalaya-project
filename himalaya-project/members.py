@@ -141,6 +141,26 @@ class Members:
 
         data['age'] = data['year'] - data['yob']
 
+        data['status'] = data['status'].apply(lambda x: x.lower())
+        data['status'] = np.where(data['leader']==1, 'leader', data['status'])
+        data['status'] = np.where(data['hired']==1, 'h-a worker', data['status'])
+        data['status'] = np.where(data['deputy']==1, 'deputy', data['status'])
+        data['status'] = np.where(data['status'].str.contains('climber'), 'climber', data['status'])
+        data['status'] = np.where(data['status'].str.contains('climbing'), 'climber', data['status'])
+        data['status'] = np.where(data['status'].str.contains('bc'), 'bc member', data['status'])
+        mylist = ['film', 'cameraman', 'photographer', 'video', 'media', 'journalist']
+        pattern = '|'.join(mylist)
+        data['status'] = np.where(data['status'].str.contains(pattern), 'media', data['status'])
+        status_list = ['leader', 'h-a worker', 'deputy', 'climber', 'bc member', 'media']
+
+        def in_status(x):
+            if x not in status_list:
+                return 'other'
+            else:
+                return x
+
+        data['status'] = data['status'].apply(lambda x: in_status(x))
+
         return data
 
 
