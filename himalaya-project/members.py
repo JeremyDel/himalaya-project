@@ -139,12 +139,11 @@ class Members:
         data.occupation.fillna('Unknown', inplace = True)
         data.residence.fillna('Unknown', inplace = True)
 
-        now_year = datetime.datetime.now().year
-        data['age'] = now_year - data['yob']
+        data['age'] = data['year'] - data['yob']
 
         return data
 
-        
+
 if __name__ == "__main__":
     members_clean =  Members().get_data()
     members_clean = Members().clean_data(members_clean)
