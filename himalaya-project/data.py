@@ -166,6 +166,8 @@ class Data:
         df = df.reset_index()
         df.drop(columns=['exp_id', 'index', 'bc_date', 'moonrise', 'moonset', 'sunrise', 'sunset'], inplace = True)
 
+        df = df.merge(peak, on='peak_id', how='left')
+
         return df
 
 
