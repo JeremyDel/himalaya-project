@@ -21,3 +21,4 @@ hereby
 gensim
 xlrd
 wwo_hist
+tensorflow
