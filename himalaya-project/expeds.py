@@ -115,7 +115,7 @@ class Expeds(object):
 
         return df
 
-        def get_time_series(self):
+    def get_time_series(self):
         """
         This function get the data from the csv file and return a DataFrame.
         """
