@@ -45,7 +45,7 @@ https://trello.com/invite/b/B6UFlhf7/be72b5e325d221862dd493463272353e/le-wagon-p
 https://www.himalayandatabase.com/
 
 
-# Stratup the project
+# Startup the project
 Clone the project and install it:
 ```bash
   $ git clone gitlab.com/{user}/himalaya-project
