@@ -14,6 +14,7 @@ The Himalayan Database contains data over:
 
 # "Le Wagon" Project
 **Data**
+
 The data collection contains five files:
   * Peaks
   * Expeditions
@@ -22,13 +23,16 @@ The data collection contains five files:
   * Peaks Coordinates
 
 **Data Visualization**
+
 The goal is to understand and visualize data
 
 **Machine Learning**
+
 This project will, firstly, focus on predicting the member's ascension success.
 The second goal of the project is predicting the number of summiters on the Everest using time-series.
 
 **Web App**
+
 The final goal is to set up
 
 # Resources
