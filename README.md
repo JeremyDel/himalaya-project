@@ -1,4 +1,4 @@
-# Welcome to the Himalayan Expeditions Project from Le Wagon
+# Welcome to the Himalayan Expeditions Project
 
 # General Information
 The Himalayan Database is a compilation of records for all expeditions that have climbed in the Nepal Himalaya.
@@ -13,7 +13,7 @@ The Himalayan Database contains data over:
 
 
 # "Le Wagon" Project
-## Data
+**Data**
 The data collection contains five files:
   * Peaks
   * Expeditions
@@ -21,21 +21,21 @@ The data collection contains five files:
   * Weather
   * Peaks Coordinates
 
-## Data Visualization
+**Data Visualization**
 The goal is to understand and visualize data
 
-## Machine Learning
+**Machine Learning**
 This project will, firstly, focus on predicting the member's ascension success.
 The second goal of the project is predicting the number of summiters on the Everest using time-series.
 
-## Web App
+**Web App**
 The final goal is to set up
 
 # Resources
-## Project Management
+**Project Management**
 https://trello.com/invite/b/B6UFlhf7/be72b5e325d221862dd493463272353e/le-wagon-project
 
-## Himalayan Database Guide
+**Himalayan Database Guide**
 https://www.himalayandatabase.com/
 
 
