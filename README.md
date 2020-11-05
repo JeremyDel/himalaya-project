@@ -24,22 +24,24 @@ The data collection contains five files:
 
 **Data Visualization**
 
-The goal is to understand and visualize data
+The goal is to understand and visualize pattern.
 
 **Machine Learning**
 
-This project will, firstly, focus on predicting the member's ascension success.
-The second goal of the project is predicting the number of summiters on the Everest using time-series.
+* Predict the member's ascension success (binary classification).
+* Predict the number of summiters on the Everest (time-series).
 
 **Web App**
 
-The final goal is to set up
+The final goal is to set up the dashboard and the mahcine learning algorythm in a web app such as Flask or Streamlit.
 
 # Resources
 **Project Management**
+
 https://trello.com/invite/b/B6UFlhf7/be72b5e325d221862dd493463272353e/le-wagon-project
 
 **Himalayan Database Guide**
+
 https://www.himalayandatabase.com/
 
 
