@@ -17,7 +17,7 @@ class Time(object):
                 return f[:-4]
         data = {}
         for f in file_names:
-            data[key_from_file_name(f)] = pd.read_excel(os.path.join(xls_path, f))
+            data[key_from_file_name(f)] = pd.read_csv(os.path.join(xls_path, f), sep=';', encoding= 'utf-8')
 
         data = data['exped_time']
 
