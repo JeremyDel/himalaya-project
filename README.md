@@ -1,79 +1,49 @@
-# Project Management
-- https://trello.com/invite/b/B6UFlhf7/be72b5e325d221862dd493463272353e/le-wagon-project
+# Welcome to the Himalayan Expeditions Project from Le Wagon
 
-# Himalayan Database Guide 
-https://lewagon-alumni.slack.com/files/U01ATA2KLUC/F01E7AMVB7T/himalayan_database_guide__jul_2020___complete_.pdf
-
-# Data analysis
-- Document here the project: himalaya-project
-
-- Description: Machine learning project and data visualization
-
-- Data Source:
-Elizabeth Hawley (1923 – 2018) was an American journalist, author, and chronicler of Himalayan mountaineering expeditions.
-
-Hawley's The Himalayan Database became the unofficial record for climbs in the Nepalese Himalaya.
+# General Information
+The Himalayan Database is a compilation of records for all expeditions that have climbed in the Nepal Himalaya.
+The database is based on the expedition archives of Elizabeth Hawley, a longtime journalist based in Kathmandu, and it is supplemented by information gathered from books, alpine journals and correspondence with Himalayan climbers.
+Each expedition record contains detailed information including dates, routes, camps, use of supplemental oxygen, successes, deaths and accidents.
 
 The Himalayan Database contains data over:
+  * Year: 2004 - to date
+  * Peaks: 450+
+  * Expeditions: 10.000+
+  * Members: 80.000+
 
-  2004 - to date
-  Peaks 450+
-  Expeditions 10.000+
-  Members 80.000+
 
+# "Le Wagon" Project
+## Data
+The data collection contains five files:
+  * Peaks
+  * Expeditions
+  * Members
+  * Weather
+  * Peaks Coordinates
 
-- Type of analysis:
-This project will focus on predicting the expeditions’ success based on our machine learning algorithm and predicting the number of summiters using time-series
+## Data Visualization
+The goal is to understand and visualize data
+
+## Machine Learning
+This project will, firstly, focus on predicting the member's ascension success.
+The second goal of the project is predicting the number of summiters on the Everest using time-series.
+
+## Web App
+The final goal is to set up
+
+# Resources
+## Project Management
+https://trello.com/invite/b/B6UFlhf7/be72b5e325d221862dd493463272353e/le-wagon-project
+
+## Himalayan Database Guide
+https://www.himalayandatabase.com/
 
 
 # Stratup the project
-
-The initial setup.
-
-Create virtualenv and install the project:
-```bash
-  $ sudo apt-get install virtualenv python-pip python-dev
-  $ deactivate; virtualenv ~/venv ; source ~/venv/bin/activate ;\
-    pip install pip -U; pip install -r requirements.txt
-```
-
-Unittest test:
-```bash
-  $ make clean install test
-```
-
-Check for himalaya-project in gitlab.com/{group}.
-If your project is not set please add it:
-
-- Create a new project on `gitlab.com/{group}/himalaya-project`
-- Then populate it:
-
-```bash
-  $ ##   e.g. if group is "{group}" and project_name is "himalaya-project"
-  $ git remote add origin git@gitlab.com:{group}/himalaya-project.git
-  $ git push -u origin master
-  $ git push -u origin --tags
-```
-
-Functionnal test with a script:
-```bash
-  $ cd /tmp
-  $ himalaya-project-run
-```
-# Install
-Go to `gitlab.com/{JeremyDel}/himalaya-project` to see the project, manage issues,
-
-
-Create a python3 virtualenv and activate it:
-```bash
-  $ sudo apt-get install virtualenv python-pip python-dev
-  $ deactivate; virtualenv -ppython3 ~/venv ; source ~/venv/bin/activate
-```
-
 Clone the project and install it:
 ```bash
-  $ git clone gitlab.com/{group}/himalaya-project
-  $ cd himalaya-project
+  $ git clone gitlab.com/{user}/himalaya-project
+  $ cd ~/code/{user}/himalaya-project
   $ pip install -r requirements.txt
   $ make clean install test                # install and test
 ```
@@ -82,10 +52,3 @@ Functionnal test with a script:
   $ cd /tmp
   $ himalaya-project-run
 ```
-
-# Continus integration
-## Github
-Every push of `master` branch will execute `.github/workflows/pythonpackages.yml` docker jobs.
-
-## Gitlab
-Every push of `master` branch will execute `.gitlab-ci.yml` docker jobs.
