@@ -80,7 +80,8 @@ class HimalXGB():
             acc_snow = weather.loc[date1:date2, 'totalSnow_cm'].sum()
             df.loc[index, 'cumul_snow'] = acc_snow
 
-        df.drop(columns=['summit_date', 'exp_id', 'bc_date', 'term_reason'], inplace=True)
+        df.drop(columns=['summit_date', 'exp_id', 'bc_date',
+            'term_reason', 'pressure_past', 'pressure_futur'], inplace=True)
         # Data Processing
         col_num = []
         col_bool =[]
