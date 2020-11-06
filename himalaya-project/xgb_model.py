@@ -57,6 +57,9 @@ class HimalXGB():
         weather['pressure_futur'] = weather['pressure'].shift(-2).rolling(window=3).mean()
         weather['stability'] = weather['pressure_futur'] - weather['pressure_past']
 
+        exped['sherpa_ratio'] = exped['tot_hired'] / exped['tot_members']
+        exped['sherpa_ratio'] = np.where(exped['sherpa_ratio'] == np.inf, 0, exped['sherpa_ratio'])
+
         exped = exped.set_index('summit_date')
         weather = weather.set_index('date_time')
 
