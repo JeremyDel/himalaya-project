@@ -150,6 +150,7 @@ class Data:
 
         # Change the type of the date in the table 'exped'
         exped['summit_date'] = pd.to_datetime(exped.summit_date, errors = 'coerce')
+        exped['summit_date1'] = exped['summit_date']
         exped['bc_date'] = pd.to_datetime(exped.bc_date , errors = 'coerce')
 
         ## Merging
@@ -164,7 +165,7 @@ class Data:
         df = df.merge(wet, how='left', left_index=True, right_index=True)
         df = df.reset_index()
         
-        df.drop(columns=['index', 'bc_date', 'moonrise', 'moonset', 'sunrise', 'sunset'], inplace = True)
+        df.drop(columns=['index', 'moonrise', 'moonset', 'sunrise', 'sunset'], inplace = True)
 
         df = df.merge(peak, on='peak_id', how='left')
 
