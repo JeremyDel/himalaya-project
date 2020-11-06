@@ -120,7 +120,6 @@ class Data:
                  'countries',
                'summit_time',
                'term_date',
-               'term_reason',
                'term_note',
                'high_point',
                'traverse',
@@ -164,11 +163,9 @@ class Data:
         # Merge the table 'exped-member' and 'weather'
         df = df.merge(wet, how='left', left_index=True, right_index=True)
         df = df.reset_index()
-        df.drop(columns=['exp_id', 'index', 'bc_date', 'moonrise', 'moonset', 'sunrise', 'sunset'], inplace = True)
+        
+        df.drop(columns=['index', 'bc_date', 'moonrise', 'moonset', 'sunrise', 'sunset'], inplace = True)
 
         df = df.merge(peak, on='peak_id', how='left')
 
         return df
-
-
-
