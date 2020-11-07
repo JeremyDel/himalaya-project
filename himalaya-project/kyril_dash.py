@@ -38,7 +38,10 @@ app.layout = html.Div([
         options=[{'label':i, 'value':i} for i in peak_list['peak']]),
 
     html.Div(id='output', children=[]),
-    html.Br()])
+    html.Br(),
+
+    html.Div(html.Iframe(src = "https://fatmap.com/around/Mount_Everest/China/@27.9967433,86.9117653,28274.0557688,-63.6300764,0.4395348,7406.1808273,normal"))
+])
 
 
 # # ------------------------------------------------------------------------------
