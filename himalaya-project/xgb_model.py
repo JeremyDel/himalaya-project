@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.preprocessing import MinMaxScaler, OneHotEncoder
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
@@ -52,6 +53,7 @@ class HimalXGB():
 
         exped['summit_date'] = pd.to_datetime(exped.summit_date, errors = 'coerce')
         exped['bc_date'] = pd.to_datetime(exped.bc_date , errors = 'coerce')
+        exped['rope'] = np.where(exped['rope']>0, True, False)
 
         weather['pressure_past'] = weather['pressure'].rolling(window=3).mean()
         weather['pressure_futur'] = weather['pressure'].shift(-2).rolling(window=3).mean()
@@ -80,8 +82,22 @@ class HimalXGB():
             acc_snow = weather.loc[date1:date2, 'totalSnow_cm'].sum()
             df.loc[index, 'cumul_snow'] = acc_snow
 
-        df.drop(columns=['summit_date', 'exp_id', 'bc_date',
-            'term_reason', 'pressure_past', 'pressure_futur'], inplace=True)
+        feature_to_drop = ['tempC', 'WindChillC', 'primrte', 'disabled',
+                   'traverse', 'parapente', 'solo', 'ski', 'speed',
+                   'summit_date', 'exp_id', 'bc_date', 'term_reason',
+                   'pressure_past', 'pressure_futur', 'uvIndex']
+
+        df.drop(columns= feature_to_drop, inplace=True)
+
+        # Create an imputer for boolean feature (does nothing)
+        class BoolImputer(BaseEstimator, TransformerMixin):
+            def __init__(self):
+                return None
+            def fit(self, X, y=None):
+                return self
+            def transform(self, X):
+                return X
+
         # Data Processing
         col_num = []
         col_bool =[]
@@ -106,6 +122,9 @@ class HimalXGB():
             ('imputer', SimpleImputer()),
             ('scaler', MinMaxScaler())])
 
+        bool_transformer = Pipeline(steps=[
+            ('imputer', BoolImputer())])
+
         categorical_transformer = Pipeline(steps=[
             ('imputer', SimpleImputer(strategy='most_frequent')),
             ('onehot', OneHotEncoder(drop= 'first', handle_unknown='error'))])
@@ -113,17 +132,24 @@ class HimalXGB():
         preprocessor = ColumnTransformer(
             transformers=[
                 ('num', numeric_transformer, col_num),
+                ('bool', bool_transformer, col_bool),
                 ('cat', categorical_transformer, col_object)])
 
-        pipe = Pipeline(steps=[('preprocessor', preprocessor)])
+        clf = Pipeline(steps=[('preprocessor', preprocessor)])
 
         X = df.drop(columns=['summit_success'])
         y = df.summit_success
 
-        X_trans = pipe.fit_transform(X)
+        X_trans = clf.fit_transform(X)
         X_tr = X_trans.toarray()
 
         X_train, X_test, y_train, y_test = train_test_split(X_tr, y, test_size= 0.3, random_state= 1)
+
+        # get feature names after the pipeline
+        ohe_col = list(clf.named_steps['preprocessor'].transformers_[2][1]\
+        .named_steps['onehot'].get_feature_names(col_object))
+
+        feature_names = col_num + col_bool + ohe_col
 
         # Model Traning
         boost = XGBClassifier()
@@ -132,9 +158,6 @@ class HimalXGB():
         # Save trained model
         model_name = 'XGB_model.joblib'
         joblib.dump(boost, model_name)
-
-        # Save pipeline
-        dump(pipe, open('pipeline.pkl', 'wb'))
 
         return boost
 
@@ -147,12 +170,65 @@ class HimalXGB():
         return loaded_model
 
     def predict_model(self, data):
+        """
+        This function takes a DataFrame and returns a prediction
+        """
+
+        df = data.copy()
+
         # load the pipeline & the model
-        pipe = load(open('pipeline.pkl', 'rb'))
         model = joblib.load('XGB_model.joblib')
 
         # scale & impute data
-        X = pipe.fit_transform(data)
+        # Create an imputer for boolean feature (does nothing)
+        class BoolImputer(BaseEstimator, TransformerMixin):
+            def __init__(self):
+                return None
+            def fit(self, X, y=None):
+                return self
+            def transform(self, X):
+                return X
+
+        # Data Processing
+        col_num = []
+        col_bool =[]
+        col_object =[]
+
+        for col in df:
+            if df[col].dtype == "float64":
+                col_num.append(col)
+
+            if df[col].dtype == "int64":
+                col_num.append(col)
+
+            if df[col].dtype == 'bool':
+                col_bool.append(col)
+
+            if df[col].dtype == 'object':
+                col_object.append(col)
+
+
+        numeric_transformer = Pipeline(steps=[
+            ('imputer', SimpleImputer()),
+            ('scaler', MinMaxScaler())])
+
+        bool_transformer = Pipeline(steps=[
+            ('imputer', BoolImputer())])
+
+        categorical_transformer = Pipeline(steps=[
+            ('imputer', SimpleImputer(strategy='most_frequent')),
+            ('onehot', OneHotEncoder(drop= 'first', handle_unknown='error'))])
+
+        preprocessor = ColumnTransformer(
+            transformers=[
+                ('num', numeric_transformer, col_num),
+                ('bool', bool_transformer, col_bool),
+                ('cat', categorical_transformer, col_object)])
+
+        clf = Pipeline(steps=[('preprocessor', preprocessor)])
+
+
+        X = clf.fit_transform(df)
         X_tr = X.toarray()
 
         y_pred = model.predict(X_tr)

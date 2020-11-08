@@ -80,6 +80,7 @@ class Data():
         # Feature Engineering (1/2)
         exped['sherpa_ratio'] = exped['tot_hired'] / exped['tot_members']
         exped['sherpa_ratio'] = np.where(exped['sherpa_ratio'] == np.inf, 0, exped['sherpa_ratio'])
+        exped['rope'] = np.where(exped['rope']>0, True, False)
 
         weather['pressure_past'] = weather['pressure'].rolling(window=3).mean()
         weather['pressure_futur'] = weather['pressure'].shift(-2).rolling(window=3).mean()
