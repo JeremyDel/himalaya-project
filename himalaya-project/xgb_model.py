@@ -85,7 +85,7 @@ class HimalXGB():
         feature_to_drop = ['tempC', 'WindChillC', 'primrte', 'disabled',
                    'traverse', 'parapente', 'solo', 'ski', 'speed',
                    'summit_date', 'exp_id', 'bc_date', 'term_reason',
-                   'pressure_past', 'pressure_futur', 'uvIndex']
+                   'pressure_past', 'pressure_futur', 'uvIndex', 'o2_used']
 
         df.drop(columns= feature_to_drop, inplace=True)
 
