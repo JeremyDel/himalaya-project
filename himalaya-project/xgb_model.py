@@ -34,7 +34,7 @@ class HimalXGB():
         # Drop columns
         mem_to_drop = ['memb_id','year','unique_id','peak_id','residence','occupation',
         'summit_claimed','summit_disputed','highpt','high_point','death','death_type',
-        'death_height','death_class','summit_bid','summit_term','summit_date1',
+        'death_height','death_class','summit_term','summit_date1', 'summit_bid',
         'citizenship','o2_climb','o2_descent','o2_sleep','o2_medical', 'o2_none',
         'yob', 'route1', 'ascent1', 'leader', 'deputy', 'bconly', 'nottobc', 'support',
         'hired', 'sherpa', 'tibetan']
@@ -55,25 +55,25 @@ class HimalXGB():
         exped['bc_date'] = pd.to_datetime(exped.bc_date , errors = 'coerce')
         exped['rope'] = np.where(exped['rope']>0, True, False)
 
-        weather['pressure_past'] = weather['pressure'].rolling(window=3).mean()
-        weather['pressure_futur'] = weather['pressure'].shift(-2).rolling(window=3).mean()
-        weather['stability'] = weather['pressure_futur'] - weather['pressure_past']
+        exped = exped.set_index('summit_date')
+        weather = weather.set_index('date_time')
 
+        # Feature Engineering (1/2)
         exped['sherpa_ratio'] = exped['tot_hired'] / exped['tot_members']
         exped['sherpa_ratio'] = np.where(exped['sherpa_ratio'] == np.inf, 0, exped['sherpa_ratio'])
 
-        exped = exped.set_index('summit_date')
-        weather = weather.set_index('date_time')
+        weather['pressure_past'] = weather['pressure'].rolling(window=3).mean()
+        weather['pressure_futur'] = weather['pressure'].shift(-2).rolling(window=3).mean()
+        weather['stability'] = weather['pressure_futur'] - weather['pressure_past']
 
         # Merge DataFrames
         df = exped.merge(weather, how='left', left_index=True, right_index=True)
         df = df.reset_index()
         df = df.rename(columns={'index' : 'summit_date'})
         df = df.merge(member, on='exp_id', how = 'right')
-        df.drop(columns=['moonrise', 'moonset', 'sunrise', 'sunset'], inplace = True)
         df = df.dropna(subset=['summit_date', 'bc_date'])
 
-        # Feature Engineering
+        # Feature Engineering (2/2)
         df['cumul_snow'] = 0
 
         for index, row in df.iterrows():
@@ -82,10 +82,10 @@ class HimalXGB():
             acc_snow = weather.loc[date1:date2, 'totalSnow_cm'].sum()
             df.loc[index, 'cumul_snow'] = acc_snow
 
-        feature_to_drop = ['tempC', 'WindChillC', 'primrte', 'disabled',
-                   'traverse', 'parapente', 'solo', 'ski', 'speed',
-                   'summit_date', 'exp_id', 'bc_date', 'term_reason',
-                   'pressure_past', 'pressure_futur', 'uvIndex', 'o2_used']
+        feature_to_drop = ['tempC', 'WindChillC', 'primrte', 'disabled','moonrise', 'moonset',
+                           'sunrise', 'sunset', 'traverse', 'parapente', 'solo', 'ski', 'speed',
+                           'summit_date', 'exp_id', 'bc_date', 'term_reason', 'tot_days',
+                           'pressure_past', 'pressure_futur', 'uvIndex', 'o2_used']
 
         df.drop(columns= feature_to_drop, inplace=True)
 
