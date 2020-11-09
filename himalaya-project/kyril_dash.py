@@ -49,18 +49,10 @@ app.layout = html.Div([
             value=df.year.max()
         ),
 
-        dcc.Slider(
-            min=0,
-            max=4,
-            step=None,
-            marks={
-                0: 'Spring',
-                1: 'Summer',
-                2: 'Autumn',
-                3: 'Winter',
-                4: 'All'
-            },
-            value=4
+        dcc.RadioItems(
+            id='input_season',
+            options=[{'label' : i, 'value' : str(i)} for i in season_list],
+            value='All'
         ),
 
 # Peak Section # ---------------------------------------------------------------
@@ -193,7 +185,7 @@ app.layout = html.Div([
         )
 
 def update_text(peak, year, season):
-    #season = season_list[int(season_value)]
+
     if season=='All':
         season = ''
 
@@ -223,8 +215,8 @@ def update_text(peak, year, season):
                 [Input('input_season', 'value')]
                 )
 
-def update_peak(peak, year, season_value):
-    season = season_list[int(season_value)]
+def update_peak(peak, year, season):
+
     if season=='All':
         season = ''
 
@@ -298,8 +290,8 @@ def update_peak(peak, year, season_value):
                 [Input('input_year', 'value')],
                 [Input('input_season', 'value')])
 
-def update_exp(peak, year, season_value):
-    season = season_list[int(season_value)]
+def update_exp(peak, year, season):
+
     if season=='All':
         season = ''
 
@@ -387,8 +379,8 @@ def update_exp(peak, year, season_value):
                 [Input('input_year', 'value')],
                 [Input('input_season', 'value')])
 
-def update_exp(year, season_value):
-    season = season_list[int(season_value)]
+def update_exp(year, season):
+
     if season=='All':
         season = ''
 
