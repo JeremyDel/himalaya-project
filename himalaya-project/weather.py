@@ -1,4 +1,4 @@
-import datetime
+from datetime import date, datetime
 import os
 import pandas as pd
 import numpy as np
@@ -88,7 +88,25 @@ class Weather:
         data['sunrise'] = pd.to_datetime(date_time_str + " " + data['sunrise'])
         data['sunset'] = pd.to_datetime(date_time_str + " " + data['sunset'])
 
+        Y = 2000 # dummy leap year to allow input X-02-29 (leap day)
+        seasons = [('Winter', (date(Y,  1,  1),  date(Y,  3, 20))),
+                   ('Spring', (date(Y,  3, 21),  date(Y,  6, 20))),
+                   ('Summer', (date(Y,  6, 21),  date(Y,  9, 22))),
+                   ('Autumn', (date(Y,  9, 23),  date(Y, 12, 20))),
+                   ('Winter', (date(Y, 12, 21),  date(Y, 12, 31)))]
+
+        def get_season(now):
+            if isinstance(now, datetime):
+                now = now.date()
+            now = now.replace(year=Y)
+            return next(season for season, (start, end) in seasons
+                        if start <= now <= end)
+
+        data['date_season'] = ''
+        data['date_season'] = data['date_time'].apply(lambda x: get_season(x))
+
         return data
+
 if __name__ == "__main__":
     weather_clean =  Weather().get_data()
     weather_clean = Weather().clean_data(weather_clean)
