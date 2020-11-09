@@ -1,3 +1,5 @@
+# ------------------------------------------------------------------------------
+# imports
 import datetime as dt
 import re
 
@@ -9,6 +11,7 @@ import dash_daq as daq
 
 import dash_table
 import pandas as pd
+from app import app
 
 from dash.dependencies import Input, Output, State
 import os
@@ -20,10 +23,13 @@ himalaya_path =path_list[:-1]
 himalaya_path = "\\".join(himalaya_path)
 
 sys.path.insert(0, himalaya_path)
+
 from peaks import Peaks
+from xgb_model import HimalXGB
 
+# ------------------------------------------------------------------------------
+# changing working directory to import data
 
-# Get peaks data
 os.chdir(himalaya_path)
 peak = Peaks().get_data()
 peak = Peaks().clean_data(peak)
@@ -32,12 +38,19 @@ options_peaks = []
 for i , row in peak.iterrows():
     options_peaks.append({'label':row['peak_name'], 'value': row['peak_id']})
 
+# ------------------------------------------------------------------------------
+# return to current working directory
 os.chdir(root_dir)
-app = dash.Dash(__name__)
-server = app.server
 
-app.config.suppress_callback_exceptions = False
+# # ------------------------------------------------------------------------------
+# # run that for single page element
+# app = dash.Dash(__name__)
+# server = app.server
 
+# app.config.suppress_callback_exceptions = False
+
+# ------------------------------------------------------------------------------
+# defining layot
 layout = html.Div(
     [dbc.Row([
             dbc.Col(html.Img(src="assets/logo_wagon.png", className="app__logo")),
@@ -318,7 +331,8 @@ layout = html.Div(
                                                     id='input-age',
                                                     type='number',
                                                     placeholder="Age of the person",
-                                                    value=30
+                                                    value=30,
+                                                    min=16
 
                                                 ),
                                             ],
@@ -346,6 +360,8 @@ layout = html.Div(
                                             style={'margin-left': '40px',
                                                     'margin-bottom': '10px'},
                                         ),
+                                        html.Br(),
+                                        html.Br(),
                                         html.Div(
                                             [
                                                 html.Button(
@@ -372,26 +388,8 @@ layout = html.Div(
                             children=[
                                 html.Div(
                                     [
-                                        dcc.Graph(
-                                            id="entry-graph",
-                                            figure={
-                                                "data": [],
-                                                "layout": {
-                                                    "title": "Timestamp vs. Amount Pipetted (mL)",
-                                                    "xaxis": {
-                                                        "title": "Timestamp (YYYY-MM-DD HH-MM-SS)"
-                                                    },
-                                                    "yaxis": {
-                                                        "title": "Amount Pipetted (mL)"
-                                                    },
-                                                    "annotations": [],
-                                                    "margin": {"l": 50},
-                                                },
-                                            },
-                                            config={"editable": True},
-                                            className="graph__1",
-                                        ),
-                                        html.Br(),
+                                        html.H5(id='fail-succes', style={'margin-bottom': '40px'}),
+
                                         html.Div(
                                             children=[
                                                 html.Button(
@@ -448,7 +446,7 @@ layout = html.Div(
 
 # @app.callback
 @app.callback(
-    Output("tabs", "value"),
+    Output("fail-succes", "children"),
     [Input("submit-entry", "n_clicks")],
     [
         State("select-mountain", "value"),
@@ -469,9 +467,9 @@ layout = html.Div(
     ],
 )
 
-def dataframe_predict(submit_entry, mountain, host, days, camps, rope, total_members, total_hired, hired, comroute, stanroute, season, sex, status, age)
+def dataframe_predict(submit_entry, mountain, host, days, camps, rope, total_members, total_hired, hired, comroute, stanroute, season, sex, status, age):
 
-    predict = pd.DataFrame(columns=['peak_id', 'host', 'summit_days', 'camps', 'rope', 'tot_members',
+    to_predict = pd.DataFrame(columns=['peak_id', 'host', 'summit_days', 'camps', 'rope', 'tot_members',
        'tot_hired', 'no_hired', 'comrte', 'stdrte', 'peak_height',
        'sherpa_ratio', 'maxtempC', 'mintempC', 'totalSnow_cm', 'sunHour',
        'moon_illumination', 'DewPointC', 'FeelsLikeC', 'HeatIndexC',
@@ -485,13 +483,25 @@ def dataframe_predict(submit_entry, mountain, host, days, camps, rope, total_mem
         peak_height = peak[peak['peak_id']==mountain]['height_m'].values[0]
         sherpa_ratio = total_members/total_hired
 
-        predict = predict.append({'peak_id':mountain, 'host':host, 'summit_days':days, 'camps':camps, 'rope':bool(rope), 'tot_members':total_members,
-       'tot_hired':total_hired, 'no_hired':bool(hired), 'comrte': bool(comroute), 'stdrte':bool(stanroute), 'peak_height':peak_height,
+        to_predict = to_predict.append({'peak_id':mountain, 'host':host, 'summit_days':int(days), 'camps':int(camps), 'rope':bool(rope), 'tot_members':int(total_members),
+       'tot_hired':int(total_hired), 'no_hired':bool(hired), 'comrte': bool(comroute), 'stdrte':bool(stanroute), 'peak_height':peak_height,
        'sherpa_ratio': sherpa_ratio , 'maxtempC':-2.277021, 'mintempC': -9.736381, 'totalSnow_cm': 1.754977, 'sunHour': 10.275210,
        'moon_illumination': 48.470733, 'DewPointC' :-8.459432 , 'FeelsLikeC':-9.604752 , 'HeatIndexC': -5.661692,
        'WindGustKmph':13.669081, 'cloudcover': 45.633150, 'humidity': 81.966314, 'precipMM': 2.532628, 'pressure' : 1013.688569,
        'visibility':7.486308, 'winddirDegree':211.464793, 'windspeedKmph': 10.086931, 'stability': 0.045808, 'season' :season,
-       'sex_M': sex, 'status': status, 'age', 'cumul_snow':43})
+       'sex_M': int(sex), 'status': status, 'age': int(age), 'cumul_snow':43}, ignore_index=True)
+
+        os.chdir(himalaya_path)
+
+        prediction = HimalXGB().predict_model(to_predict)
+
+        os.chdir(root_dir)
+
+        if prediction[0][2] == 1:
+            return f"This person will succeed the expedition with a {round(100*prediction[0][1], 2)}% chance"
+        if prediction[0][2] == 0:
+            return f"Unfortunately this person will most likely fail the expedition with a {round(100*prediction[0][1], 2)}% chance"
+        raise dash.exceptions.PreventUpdate
 
 
 # # def entry_to_db(submit_entry, operator_id, reagent, time_elapsed, amount_pipetd):

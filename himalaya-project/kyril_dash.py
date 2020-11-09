@@ -193,6 +193,7 @@ app.layout = html.Div([
         )
 
 def update_text(peak, year, season):
+    #season = season_list[int(season_value)]
     if season=='All':
         season = ''
 
@@ -222,7 +223,8 @@ def update_text(peak, year, season):
                 [Input('input_season', 'value')]
                 )
 
-def update_peak(peak, year, season):
+def update_peak(peak, year, season_value):
+    season = season_list[int(season_value)]
     if season=='All':
         season = ''
 
@@ -296,7 +298,8 @@ def update_peak(peak, year, season):
                 [Input('input_year', 'value')],
                 [Input('input_season', 'value')])
 
-def update_exp(peak, year, season):
+def update_exp(peak, year, season_value):
+    season = season_list[int(season_value)]
     if season=='All':
         season = ''
 
@@ -384,7 +387,8 @@ def update_exp(peak, year, season):
                 [Input('input_year', 'value')],
                 [Input('input_season', 'value')])
 
-def update_exp(year, season):
+def update_exp(year, season_value):
+    season = season_list[int(season_value)]
     if season=='All':
         season = ''
 
