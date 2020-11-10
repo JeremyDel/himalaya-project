@@ -4,6 +4,7 @@ import plotly.graph_objects as go
 import dash
 import dash_core_components as dcc
 import dash_bootstrap_components as dbc
+import dash_daq as daq
 import dash_html_components as html
 from dash.dependencies import Input, Output
 from data import Data
@@ -17,7 +18,7 @@ app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
 # ------------------------------------------------------------------------------
 # Import and clean data (importing csv into pandas)
-df = Data().get_matching_table()
+df = pd.read_csv('data/matching_table.csv')
 
 mylist = df.peak_name.unique()
 peak_list = pd.DataFrame({'peak' : mylist})
@@ -47,6 +48,14 @@ app.layout = html.Div([
             step=None,
             marks={i : str(i) for i in range(df.year.min(), df.year.max()+1)},
             value=df.year.max()
+        ),
+
+        daq.Slider(
+            min=0,
+            max=100,
+            value=df.year.max(),
+            marks={i : str(i) for i in range(df.year.min(), df.year.max()+1)},
+            size=265
         ),
 
         dcc.RadioItems(
@@ -134,7 +143,7 @@ app.layout = html.Div([
         dbc.Row([
             dbc.Col(html.H5(children="Death's Reason", className="text-center"),
                 width=6, className="mt-4"),
-            dbc.Col(html.H5(children="Termination' Reason", className="text-center"),
+            dbc.Col(html.H5(children="Termination's Reason", className="text-center"),
                 width=6, className="mt-4"),
         ]),
 
