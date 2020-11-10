@@ -86,7 +86,7 @@ class HimalXGB():
         feature_to_drop = ['tempC', 'WindChillC', 'primrte', 'disabled','moonrise', 'moonset',
                            'sunrise', 'sunset', 'traverse', 'parapente', 'solo', 'ski', 'speed',
                            'summit_date', 'exp_id', 'bc_date', 'term_reason', 'tot_days',
-                           'pressure_past', 'pressure_futur', 'uvIndex', 'o2_used', 'date_season']
+                           'pressure_past', 'pressure_futur', 'uvIndex', 'o2_used']
 
         df.drop(columns= feature_to_drop, inplace=True)
 
@@ -167,3 +167,5 @@ class HimalXGB():
         return res
 
 
+if __name__ == '__main__':
+    HimalXGB().train_model()

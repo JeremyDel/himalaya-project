@@ -48,9 +48,44 @@ layout = html.Div([
 
               html.H2("About the project", className="text-center", style={'color': 'black',
                                                                             'top': '40%',
-                                                                            'transform': 'translate(0px, 40px)'})
+                                                                            'transform': 'translate(0px, 40px)'}),
+              html.Br(),
+              html.Br(),
+              html.Br(),
 
-              ]),
+              dbc.Container([
+                dbc.Row([dbc.Col(html.Div(children=[html.Img(src='assets/Hawley.jpg', height='100px')], style= {'border-radius': '100px'}), width=3),
+
+                        dbc.Col(html.Div(children=[html.P("The dataset comes from Elizabeth Hawley. She was an American journalist, author, \
+                          and chronicler of Himalayan mountaineering expeditions. Hawley's The Himalayan Database became the\
+                          unofficial record for climbs in the Himalaya")]), align='center',
+                          width=9)
+
+
+
+
+                ]),
+
+                html.Br(),
+                html.Br(),
+                html.Br(),
+                html.Br(),
+
+                dbc.Row([
+                  dbc.Col(html.Div(children=[html.Img(src='assets/wagon.png', height='100px')], style= {'border-radius': '100px'}), width=3),
+
+                        dbc.Col(html.P("The dataset comes from Elizabeth Hawley. She was an American journalist, author, and chronicler of Himalayan mountaineering expeditions. Hawley's The Himalayan Database became the unofficial record for climbs in the Himalaya"),
+                          align='center', width=9)
+
+
+
+                ]),
+
+
+
+              ])
+
+          ]),
 
      html.Div(style={
               'background-color': '#2C2F33',
@@ -69,7 +104,66 @@ layout = html.Div([
               children = [
               html.H2("About the team", className="text-center", style={'color': 'white',
                                                                         'top': '20%',
-                                                                        'transform': 'translate(0px, 40px)'})]),
+                                                                        'transform': 'translate(0px, 40px)'}),
+              html.Br(),
+              html.Br(),
+              html.Br(),
+              html.Br(),
+
+              dbc.Container([dbc.Row([
+
+                dbc.Col(dbc.Card([
+
+                  dbc.CardImg(src="assets/kyril.jpg", top=True),
+                  dbc.CardBody(children =[
+                    html.H5(children='Kyril', className="text-center"),
+                      html.Div(children="Kyril sucks at climbing rocks", className="card-text")]
+                  ),
+                ])
+
+                    , width=3, className="mb-4"),
+
+                dbc.Col(dbc.Card([
+
+                  dbc.CardImg(src="assets/jerem.jpg", top=True),
+                  dbc.CardBody(children =[
+                    html.H5(children='Jeremy', className="text-center"),
+                      html.Div(children="Jeremy is the best at climbing rocks", className="card-text")]
+                  ),
+                ])
+
+                , width=3, className="mb-4"),
+
+
+                dbc.Col(dbc.Card([
+
+                  dbc.CardImg(src="assets/wafaa.jpg", top=True),
+                  dbc.CardBody(children =[
+                    html.H5(children='Wafaa', className="text-center"),
+                      html.Div(children="Wafaa is the best at climbing rocks", className="card-text")]
+                  ),
+                ])
+
+                    , width=3, className="mb-4"),
+                dbc.Col(dbc.Card([
+
+                  dbc.CardImg(src="assets/nicolas.jpg", top=True),
+                  dbc.CardBody(children =[
+                    html.H5(children='Nicolas', className="text-center"),
+                      html.Div(children="Nico is the best at climbing rocks", className="card-text")]
+                  ),
+                ])
+
+                    , width=3, className="mb-4"),
+
+
+
+
+                ])
+
+                ])
+
+              ]),
     # dbc.Container([
     #     # dbc.Row([
     #     #     dbc.Col(html.Div(style={
