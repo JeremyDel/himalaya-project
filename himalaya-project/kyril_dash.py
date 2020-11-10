@@ -19,6 +19,7 @@ app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 # ------------------------------------------------------------------------------
 # Import and clean data (importing csv into pandas)
 df = pd.read_csv('data/matching_table.csv')
+df['summit_date'] = pd.to_datetime(df['summit_date'])
 
 mylist = df.peak_name.unique()
 peak_list = pd.DataFrame({'peak' : mylist})
