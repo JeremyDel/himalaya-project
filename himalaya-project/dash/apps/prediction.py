@@ -2,17 +2,14 @@
 # imports
 import datetime as dt
 import re
-
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
 import dash_bootstrap_components as dbc
 import dash_daq as daq
-
 import dash_table
 import pandas as pd
 from app import app
-
 from dash.dependencies import Input, Output, State
 import os
 import sys
@@ -25,6 +22,9 @@ himalaya_path = "\\".join(himalaya_path)
 sys.path.insert(0, himalaya_path)
 
 from xgb_model import HimalXGB
+from data import Data
+from weather import Weather
+from peaks import Peaks
 
 # ------------------------------------------------------------------------------
 # changing working directory to import data
@@ -39,6 +39,32 @@ for i , row in peak.iterrows():
 # return to current working directory
 # os.chdir(root_dir)
 
+os.chdir(himalaya_path)
+
+df = pd.read_csv('data/matching_table.csv')
+df['summit_date'] = pd.to_datetime(df['summit_date'])
+
+mylist = df.peak_name.unique()
+peak_list = pd.DataFrame({'peak' : mylist})
+season_list = ['Spring', 'Summer', 'Autumn', 'Winter', 'All']
+
+years = [{'label':i, 'value' : str(i)} for i in range(df.year.min(), df.year.max()+1)]
+years.append({'label' : df.year.max()+1, 'value' : 'All'})
+
+weather = Weather().get_data()
+weather = Weather().clean_data(weather)
+
+peak = Peaks().get_data()
+peak = Peaks().clean_data(peak)
+options_peaks = []
+
+for i , row in peak.iterrows():
+    options_peaks.append({'label':row['peak_name'], 'value': row['peak_id']})
+
+url_fatmap = "https://fatmap.com/@27.9880482,86.9248308,11734.4882324,-23.9999999,0,8620.6107686,normal"
+
+os.chdir(root_dir)
+
 # # ------------------------------------------------------------------------------
 # # run that for single page element
 # app = dash.Dash(__name__)
@@ -48,406 +74,248 @@ for i , row in peak.iterrows():
 
 # ------------------------------------------------------------------------------
 # defining layot
-layout = html.Div(
-    [
+layout = html.Div([
+    dbc.Container([
 
-        html.Div(
-            [
-                dcc.Tabs(
-                    id="tabs",
-                    value="data-entry",
-                    children=[
-                        dcc.Tab(
-                            label="DATA ENTRY",
-                            value="data-entry",
-                            children=[
-                                html.Div(
-                                    [
-                                        html.Div(
-                                            [
-                                                html.P(
-                                                    "Host Country:",
-                                                    className="input__heading",
-                                                ),
-                                                dcc.Dropdown(
-                                                    id="select-host",
-                                                    options=[{'label': 'Nepal', 'value': 'Nepal'},
-                                                    {'label': 'China', 'value': 'China'},
-                                                    {'label': 'India', 'value': 'India'},
-                                                    {'label': 'Other', 'value': 'Unknown'}],
-                                                    # value="EVER",
-                                                    placeholder="Select host country.",
-                                                    className="host__select",
-                                                    style={'width': '50%'},
-                                                ),
-                                            ],
-                                            className="dropdown__container",
-                                            style={'margin-left': '40px',
-                                            'margin-bottom': '10px'},
-                                        ),
-                                        html.Div(
-                                            [
-                                                html.P(
-                                                    "Moutain and Route:",
-                                                    className="input__heading",
-                                                ),
-                                                dcc.Dropdown(
-                                                    id="select-mountain",
-                                                    options=options_peaks,
-                                                    # value="EVER",
-                                                    placeholder="Select mountain.",
-                                                    className="peak__select",
-                                                    style={'width': '50%'},
-                                                ),
-                                            ],
-                                            className="dropdown__container",
-                                            style={'margin-left': '40px',
-                                            'margin-bottom': '10px'},
-                                        ),
-                                        html.Div(
-                                            [
-                                                html.P(
-                                                    "Season:",
-                                                    className="input__heading",
-                                                ),
-                                                dcc.Dropdown(
-                                                    id="select-season",
-                                                    options=[{'label': 'Winter', 'value': 'Winter'},
-                                                    {'label': 'Summer', 'value': 'Summer'},
-                                                    {'label': 'Spring', 'value': 'Spring'},
-                                                    {'label': 'Autumn', 'value': 'Autumn'}],
-                                                    # value="EVER",
-                                                    placeholder="Select season of the expedition.",
-                                                    className="season__select",
-                                                    style={'width': '50%'},
-                                                ),
-                                            ],
-                                            className="dropdown__container",
-                                            style={'margin-left': '40px',
-                                                    'margin-bottom': '10px'},
-                                        ),
-                                        html.Div(
-                                            [
-                                                html.P(
-                                                    "Status:",
-                                                    className="input__heading",
-                                                ),
-                                                dcc.Dropdown(
-                                                    id="select-status",
-                                                    options=[{'label': 'Climber', 'value': 'climber'},
-                                                    {'label': 'Sherpa', 'value': 'h-a worker'},
-                                                    {'label': 'Media', 'value': 'media'},
-                                                    {'label': 'Base camp member', 'value': 'bc member'},
-                                                    {'label': 'Leader', 'value': 'leader'},
-                                                    {'label': 'Deputy', 'value': 'deputy'},
-                                                    {'label': 'Other', 'value': 'other'}],
-                                                    # value="EVER",
-                                                    placeholder="Select role in the expedition.",
-                                                    className="status__select",
-                                                    style={'width': '50%'},
-                                                ),
-                                            ],
-                                            className="dropdown__container",
-                                            style={'margin-left': '40px',
-                                            'margin-bottom': '10px'},
-                                        ),
-                                        html.Div(
-                                            [
-                                                html.P(
-                                                    "Total members of the Expedition",
-                                                    className="input__heading",
-                                                    style={'margin-bottom':'40px'}
-                                                ),
-                                                daq.Slider(
-                                                    id='slider-total',
-                                                    min=0,
-                                                    max=70,
-                                                    step=1,
-                                                    value=20,
-                                                    size=500,
-                                                    handleLabel={"showCurrentValue": True,"label": "VALUE"}
-                                                ),
-                                            ],
-                                            className="slider-output-container",
-                                            style={'margin-left': '40px',
-                                                    'margin-bottom': '10px'},
-                                        ),
-                                        html.Div(
-                                            [
-                                                html.P(
-                                                    "Amount of days planned:",
-                                                    className="input__heading",
-                                                ),
+        html.Br(),
 
-                                                dbc.Input(
-                                                    id='input-days',
-                                                    type='number',
-                                                    placeholder="Number of days",
-                                                    value=20,
-                                                    size='40px'
+        html.Div(html.Iframe(src= url_fatmap,
+                        style={'border': 'none', 'width': '100%', 'height': 500})),
 
-                                                ),
-                                            ],
-                                            className="input__container",
-                                            style={'margin-left': '40px',
-                                                    'margin-bottom': '10px'},
-                                        ),
-                                        html.Div(
-                                            [
-                                                html.P(
-                                                    "Amount of camps planned:",
-                                                    className="input__heading",
-                                                ),
+        html.Br(),
 
-                                                dbc.Input(
-                                                    id='input-camps',
-                                                    type='number',
-                                                    placeholder="Number of camps",
-                                                    value=8,
-                                                    size='40px'
+        dbc.Row([
+            dbc.Col(
+                dbc.Card(
+                    html.H3(children='Are you gonna reach the summit ?',
+                                     className="text-center text-light bg-dark"),
+                    body=True, color="dark")
+            ,className="mb-4")
+        ]),
 
-                                                ),
-                                            ],
-                                            className="input__container",
-                                            style={'margin-left': '40px',
-                                                    'margin-bottom': '10px'},
-                                        ),
+        dbc.Row([
+            dbc.Col(html.Div([html.P("Host Country:",className="input__heading"),
+                dcc.Dropdown(
+                        id="select-host",
+                        options=[{'label': 'Nepal', 'value': 'Nepal'},
+                        {'label': 'China', 'value': 'China'},
+                        {'label': 'India', 'value': 'India'},
+                        {'label': 'Other', 'value': 'Unknown'}],
+                        # value="EVER",
+                        placeholder="Select host country",
+                        className="host__select",
+                        style={'width': '80%'},
+                    )
+                ])),
 
-                                        html.Div(
-                                            [
-                                                html.P(
-                                                    "Will you follow a commercial route",
-                                                    className="input__heading",
-                                                ),
-                                                dcc.Dropdown(
-                                                    id="select-comroute",
-                                                    options=[{'label': 'Yes', 'value': 'True'},
-                                                    {'label': 'No', 'value': "False"}],
-                                                    # value="EVER",
-                                                    placeholder="commercial route? ",
-                                                    className="rope__select",
-                                                    style={'width': '50%'},
-                                                ),
-                                            ],
-                                            className="dropdown__container",
-                                            style={'margin-left': '40px',
-                                                    'margin-bottom': '10px'},
-                                        ),
-                                        html.Div(
-                                            [
-                                                html.P(
-                                                    "Will you follow the standard route to the summit",
-                                                    className="input__heading",
-                                                ),
-                                                dcc.Dropdown(
-                                                    id="select-standard",
-                                                    options=[{'label': 'Yes', 'value': 'True'},
-                                                    {'label': 'No', 'value': "False"}],
-                                                    # value="EVER",
-                                                    placeholder="Standard route ?",
-                                                    className="rope__select",
-                                                    style={'width': '50%'},
-                                                ),
-                                            ],
-                                            className="dropdown__container",
-                                            style={'margin-left': '40px',
-                                                    'margin-bottom': '10px'},
-                                        ),
-                                        html.Div(
-                                            [
-                                                html.P(
-                                                    "People hired y/n:",
-                                                    className="input__heading",
-                                                ),
-                                                dcc.Dropdown(
-                                                    id="select-hired",
-                                                    options=[{'label': 'Yes', 'value': 'True'},
-                                                    {'label': 'No', 'value': "False"}],
-                                                    # value="EVER",
-                                                    placeholder="Were some people hired to help with expedition",
-                                                    className="hired__select",
-                                                    style={'width': '50%'},
-                                                ),
-                                            ],
-                                            className="dropdown__container",
-                                            style={'margin-left': '40px',
-                                                    'margin-bottom': '10px'},
-                                        ),
-                                        html.Div(
-                                            [
-                                                html.P(
-                                                    "Fixed ropes y/n",
-                                                    className="input__heading",
-                                                ),
-                                                dcc.Dropdown(
-                                                    id="select-rope",
-                                                    options=[{'label': 'Yes', 'value': 'True'},
-                                                    {'label': 'No', 'value': "False"}],
-                                                    # value="EVER",
-                                                    placeholder="planning to place fixed ropes",
-                                                    className="rope__select",
-                                                    style={'width': '50%'},
-                                                ),
-                                            ],
-                                            className="dropdown__container",
-                                            style={'margin-left': '40px',
-                                                    'margin-bottom': '10px'},
-                                        ),
-                                        html.Div(
-                                            [
-                                                html.P(
-                                                    "Number of peple hired:",
-                                                    className="input__heading",
-                                                    style={'margin-bottom':'40px'}
-                                                ),
-                                                daq.Slider(
-                                                    id='slider-hired',
-                                                    min=0,
-                                                    max=70,
-                                                    step=1,
-                                                    value=7,
-                                                    size=500,
-                                                    handleLabel={"showCurrentValue": True,"label": "VALUE"}
-                                                ),
-                                            ],
-                                            className="slider-output-container",
-                                            style={'margin-left': '40px',
-                                                    'margin-bottom': '10px'},
-                                        ),
-                                        html.Div(
-                                            [
-                                                html.P(
-                                                    "Age:",
-                                                    className="input__heading",
-                                                ),
-
-                                                dbc.Input(
-                                                    id='input-age',
-                                                    type='number',
-                                                    placeholder="Age of the person",
-                                                    value=30,
-                                                    min=16
-
-                                                ),
-                                            ],
-                                            className="input__container",
-                                            style={'margin-left': '40px',
-                                                    'margin-bottom': '10px'},
-                                        ),
-                                        html.Div(
-                                            [
-                                                html.P(
-                                                    "Sex",
-                                                    className="input__heading",
-                                                ),
-                                                dcc.Dropdown(
-                                                    id="select-sex",
-                                                    options=[{'label': 'Male', 'value': 1},
-                                                    {'label': 'Female', 'value': 0}],
-                                                    # value="EVER",
-                                                    placeholder="Sex of the person",
-                                                    className="sex__select",
-                                                    style={'width': '50%'},
-                                                ),
-                                            ],
-                                            className="dropdown__container",
-                                            style={'margin-left': '40px',
-                                                    'margin-bottom': '10px'},
-                                        ),
-                                        html.Br(),
-                                        html.Br(),
-                                        html.Div(
-                                            [
-                                                html.Button(
-                                                    "SUBMIT ENTRY",
-                                                    id="submit-entry",
-                                                    className="submit__button",
-                                                )
-                                            ]
-                                        ),
-                                    ],
-                                    className="container__1",
-                                    # style={'background-image': "url('assets/mountain_colors.png')",
-                                    #               'background-repeat': 'no-repeat',
-                                    #               'height': '400px',
-                                    #               'background-position':'right',
-                                    #               'position': 'relative',
-                                    #               'background-size': 'cover'},
-                                )
-                            ],
-                        ),
-                        dcc.Tab(
-                            label="VIEW DATA ENTRY",
-                            value="view-entry",
-                            children=[
-                                html.Div(
-                                    [
-                                        html.H5(id='fail-succes', style={'margin-bottom': '40px'}),
-
-                                        html.Div(
-                                            children=[
-                                                html.Button(
-                                                    "ADD ANNOTATION",
-                                                    id="add-button",
-                                                    style={"margin-right": "2.5%"},
-                                                    className="add__button",
-                                                ),
-                                                html.Button(
-                                                    "DELETE ANNOTATION",
-                                                    id="delete-button",
-                                                    style={"margin-right": "2.5%"},
-                                                    className="del__button",
-                                                ),
-                                                html.Button(
-                                                    "CLEAR DATA",
-                                                    id="clear-button",
-                                                    style={"margin-right": "2.5%"},
-                                                    className="clear__button",
-                                                ),
-                                            ]
-                                        ),
-                                        html.Br(),
-                                        html.Br(),
-                                        html.Br(),
-                                        html.Br(),
-                                        html.Br(),
-                                        html.Br(),
-                                        html.Br(),
-                                        html.Br(),
-                                        html.Br(),
-                                        html.Br(),
-                                        html.Br(),
-                                        html.Br(),
-                                        html.Br(),
-                                        html.Br(),
-                                        html.Br(),
-                                        html.Br(),
-                                        html.Br(),
-                                        html.Br(),
-                                    ],
-                                    className="app_container",
-                                ),
-                            ],
-                        ),
-
-                    ],
+            dbc.Col(html.Div([html.P("Mountain and Route:",className="input__heading"),
+                dcc.Dropdown(
+                    id="select-mountain",
+                    options=options_peaks,
+                    # value="EVER",
+                    placeholder="Select mountain",
+                    className="peak__select",
+                    style={'width': '80%'},
                 )
-            ],
-            className="tabs__container",
+            ]))
+        ]),
+
+        html.Br(),
+
+        dbc.Row([
+            dbc.Col(html.Div([html.P("Season:",className="input__heading"),
+                dcc.Dropdown(
+                    id="select-season",
+                    options=[{'label': 'Winter', 'value': 'Winter'},
+                    {'label': 'Summer', 'value': 'Summer'},
+                    {'label': 'Spring', 'value': 'Spring'},
+                    {'label': 'Autumn', 'value': 'Autumn'}],
+                    # value="EVER",
+                    placeholder="Select season",
+                    className="season__select",
+                    style={'width': '80%'},
+                )
+            ])),
+            dbc.Col(html.Div([html.P("Status:",className="input__heading"),
+                dcc.Dropdown(
+                    id="select-status",
+                    options=[{'label': 'Climber', 'value': 'climber'},
+                    {'label': 'Sherpa', 'value': 'h-a worker'},
+                    {'label': 'Media', 'value': 'media'},
+                    {'label': 'Base camp member', 'value': 'bc member'},
+                    {'label': 'Leader', 'value': 'leader'},
+                    {'label': 'Deputy', 'value': 'deputy'},
+                    {'label': 'Other', 'value': 'other'}],
+                    # value="EVER",
+                    placeholder="Select role in the expedition",
+                    className="status__select",
+                    style={'width': '80%'},
+                )
+            ]))
+        ]),
+
+        html.Br(),
+
+        dbc.Row([
+            dbc.Col(html.Div([html.P("Commercial Route:",className="input__heading"),
+                dcc.Dropdown(
+                    id="select-comroute",
+                    options=[{'label': 'Yes', 'value': 'True'},
+                    {'label': 'No', 'value': "False"}],
+                    # value="EVER",
+                    placeholder="Commercial route? ",
+                    className="rope__select",
+                    style={'width': '80%'},
+                )
+            ])),
+            dbc.Col(html.Div([html.P("Standard Route:",className="input__heading"),
+                dcc.Dropdown(
+                    id="select-standard",
+                    options=[{'label': 'Yes', 'value': 'True'},
+                    {'label': 'No', 'value': "False"}],
+                    # value="EVER",
+                    placeholder="Standard route ?",
+                    className="rope__select",
+                    style={'width': '80%'},
+                )
+            ]))
+        ]),
+
+        html.Br(),
+
+        dbc.Row([
+            dbc.Col(html.Div([html.P("Hired People:",className="input__heading"),
+                dcc.Dropdown(
+                    id="select-hired",
+                    options=[{'label': 'Yes', 'value': 'True'},
+                    {'label': 'No', 'value': "False"}],
+                    # value="EVER",
+                    placeholder="Hired people ?",
+                    className="hired__select",
+                    style={'width': '80%'},
+                )
+            ])),
+            dbc.Col(html.Div([html.P("Fixed Ropes:",className="input__heading"),
+                dcc.Dropdown(
+                    id="select-rope",
+                    options=[{'label': 'Yes', 'value': 'True'},
+                    {'label': 'No', 'value': "False"}],
+                    # value="EVER",
+                    placeholder="Fixed ropes ?",
+                    className="rope__select",
+                    style={'width': '80%'},
+                )
+            ]))
+        ]),
+
+        html.Br(),
+        html.Br(),
+        html.Br(),
+
+        dbc.Row([
+            dbc.Col(html.Div([html.P("Number of climbers:",className="input__heading"),
+                daq.Slider(
+                    id='slider-total',
+                    min=0,
+                    max=70,
+                    step=1,
+                    value=20,
+                    size=350,
+                    handleLabel={"showCurrentValue": True,"label": "Members"}
+                )
+            ])),
+            dbc.Col(html.Div([html.P("Number of sherpas:",className="input__heading"),
+                daq.Slider(
+                    id='slider-hired',
+                    min=0,
+                    max=70,
+                    step=1,
+                    value=7,
+                    size=350,
+                    handleLabel={"showCurrentValue": True,"label": "Sherpas"}
+                )
+            ]))
+        ]),
+
+        html.Br(),
+
+        dbc.Row([
+            dbc.Col(html.Div([html.P("Number of days:",className="input__heading"),
+                dbc.Input(
+                    id='input-days',
+                    type='number',
+                    placeholder="Number of days",
+                    style={'width': '65%'}
+                )
+            ])),
+            dbc.Col(html.Div([html.P("Number of camps:",className="input__heading"),
+                dbc.Input(
+                    id='input-camps',
+                    type='number',
+                    placeholder="Number of camps",
+                    style={'width': '65%'}
+                )
+            ]))
+        ]),
+
+        html.Br(),
+
+        dbc.Row([
+            dbc.Col(html.Div([html.P("Age of the person:",className="input__heading"),
+                dbc.Input(
+                    id='input-age',
+                    type='number',
+                    placeholder="Age of the person",
+                    min=16,
+                    style={'width': '65%'}
+                )
+            ])),
+            dbc.Col(html.Div([html.P("Sex of the person:",className="input__heading"),
+                dcc.Dropdown(
+                    id="select-sex",
+                    options=[{'label': 'Male', 'value': 1},
+                    {'label': 'Female', 'value': 0}],
+                    # value="EVER",
+                    placeholder="Sex of the person",
+                    className="sex__select",
+                    style={'width': '80%'},
+                )
+            ]))
+        ]),
+
+        html.Br(),
+        html.Br(),
+
+        html.Div([
+            daq.StopButton(
+                id="submit-entry",
+                size=120,
+                buttonText='Calcul Prediction',
+                className="submit__button"
+            ),
+        ]),
+
+        html.Br(),
+        html.Br(),
+        html.Br(),
+        html.Br(),
+
+        daq.Gauge(
+            id='gauge_score',
+            label="SCORE",
+            color={"gradient":True,"ranges":{"red":[0,40],"yellow":[40,60],"green":[60,100]}},
+            min=0,
+            max=100,
+            value=0,
+            showCurrentValue=True
         ),
 
-        html.Footer(dbc.Row([
-                dbc.Col(html.Img(src="assets/logo_wagon.png", className="app__logo"), width=10),
-                dbc.Col(html.H4("My PREDICTION SUBMISSION", className="header__text"), width=2, align='right')])),
+    ])
+])
 
-    ],
-    className="app__container",
-)
-
-
-# @app.callback
+# @app.callback ----------------------------------------------------------------
 @app.callback(
-    Output("fail-succes", "children"),
+    Output("gauge_score", "value"),
     [Input("submit-entry", "n_clicks")],
     [
         State("select-mountain", "value"),
@@ -492,17 +360,11 @@ def dataframe_predict(submit_entry, mountain, host, days, camps, rope, total_mem
        'visibility':7.486308, 'winddirDegree':211.464793, 'windspeedKmph': 10.086931, 'stability': 0.045808, 'season' :season,
        'sex_M': int(sex), 'status': status, 'age': int(age), 'cumul_snow':43}, ignore_index=True)
 
-        os.chdir(himalaya_path)
 
         prediction = HimalXGB().predict_model(to_predict)
 
-        os.chdir(root_dir)
+        return round(prediction[0][1]*100)
 
-        if prediction[0][2] == 1:
-            return f"This person will succeed the expedition with a {round(100*prediction[0][1], 2)}% chance"
-        if prediction[0][2] == 0:
-            return f"Unfortunately this person will most likely fail the expedition with a {round(100*prediction[0][0], 2)}% chance"
-        raise dash.exceptions.PreventUpdate
 
 
 # # def entry_to_db(submit_entry, operator_id, reagent, time_elapsed, amount_pipetd):
