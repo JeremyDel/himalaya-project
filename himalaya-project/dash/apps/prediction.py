@@ -39,31 +39,25 @@ for i , row in peak.iterrows():
 # return to current working directory
 # os.chdir(root_dir)
 
-os.chdir(himalaya_path)
+# os.chdir(himalaya_path)
 
-df = pd.read_csv('data/matching_table.csv')
-df['summit_date'] = pd.to_datetime(df['summit_date'])
+# df = pd.read_csv('assets/matching_table.csv')
+# df['summit_date'] = pd.to_datetime(df['summit_date'])
 
-mylist = df.peak_name.unique()
-peak_list = pd.DataFrame({'peak' : mylist})
-season_list = ['Spring', 'Summer', 'Autumn', 'Winter', 'All']
+# mylist = df.peak_name.unique()
+# peak_list = pd.DataFrame({'peak' : mylist})
+# season_list = ['Spring', 'Summer', 'Autumn', 'Winter', 'All']
 
-years = [{'label':i, 'value' : str(i)} for i in range(df.year.min(), df.year.max()+1)]
-years.append({'label' : df.year.max()+1, 'value' : 'All'})
+# years = [{'label':i, 'value' : str(i)} for i in range(df.year.min(), df.year.max()+1)]
+# years.append({'label' : df.year.max()+1, 'value' : 'All'})
 
-weather = Weather().get_data()
-weather = Weather().clean_data(weather)
+# weather = Weather().get_data()
+# weather = Weather().clean_data(weather)
 
-peak = Peaks().get_data()
-peak = Peaks().clean_data(peak)
-options_peaks = []
-
-for i , row in peak.iterrows():
-    options_peaks.append({'label':row['peak_name'], 'value': row['peak_id']})
 
 url_fatmap = "https://fatmap.com/@27.9880482,86.9248308,11734.4882324,-23.9999999,0,8620.6107686,normal"
 
-os.chdir(root_dir)
+# os.chdir(root_dir)
 
 # # ------------------------------------------------------------------------------
 # # run that for single page element
@@ -360,8 +354,10 @@ def dataframe_predict(submit_entry, mountain, host, days, camps, rope, total_mem
        'visibility':7.486308, 'winddirDegree':211.464793, 'windspeedKmph': 10.086931, 'stability': 0.045808, 'season' :season,
        'sex_M': int(sex), 'status': status, 'age': int(age), 'cumul_snow':43}, ignore_index=True)
 
+        os.chdir(himalaya_path)
 
         prediction = HimalXGB().predict_model(to_predict)
+        os.chdir(root_dir)
 
         return round(prediction[0][1]*100)
 
