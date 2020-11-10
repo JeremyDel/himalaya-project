@@ -24,23 +24,20 @@ himalaya_path = "\\".join(himalaya_path)
 
 sys.path.insert(0, himalaya_path)
 
-from peaks import Peaks
 from xgb_model import HimalXGB
 
 # ------------------------------------------------------------------------------
 # changing working directory to import data
 
-os.chdir(himalaya_path)
-peak = Peaks().get_data()
-peak = Peaks().clean_data(peak)
+# os.chdir(himalaya_path)
+peak = pd.read_csv('assets/peaks_model.csv')
 options_peaks = []
-
 for i , row in peak.iterrows():
     options_peaks.append({'label':row['peak_name'], 'value': row['peak_id']})
 
 # ------------------------------------------------------------------------------
 # return to current working directory
-os.chdir(root_dir)
+# os.chdir(root_dir)
 
 # # ------------------------------------------------------------------------------
 # # run that for single page element
