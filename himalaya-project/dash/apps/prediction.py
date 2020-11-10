@@ -52,10 +52,7 @@ os.chdir(root_dir)
 # ------------------------------------------------------------------------------
 # defining layot
 layout = html.Div(
-    [dbc.Row([
-            dbc.Col(html.Img(src="assets/logo_wagon.png", className="app__logo")),
-            dbc.Col(html.H4("My PREDICTION SUBMISSION", className="header__text"), align='right')
-            ]),
+    [
 
         html.Div(
             [
@@ -412,37 +409,44 @@ layout = html.Div(
                                                 ),
                                             ]
                                         ),
+                                        html.Br(),
+                                        html.Br(),
+                                        html.Br(),
+                                        html.Br(),
+                                        html.Br(),
+                                        html.Br(),
+                                        html.Br(),
+                                        html.Br(),
+                                        html.Br(),
+                                        html.Br(),
+                                        html.Br(),
+                                        html.Br(),
+                                        html.Br(),
+                                        html.Br(),
+                                        html.Br(),
+                                        html.Br(),
+                                        html.Br(),
+                                        html.Br(),
                                     ],
-                                    className="graph_container",
-                                ),
-                                html.Div(
-                                    [
-                                        html.Div(
-                                            [
-                                                dash_table.DataTable(
-                                                    id="entry-table",
-                                                    style_cell={
-                                                        "minWidth": "0px",
-                                                        "maxWidth": "180px",
-                                                        "whiteSpace": "normal",
-                                                    },
-                                                )
-                                            ],
-                                            className="table__1",
-                                        )
-                                    ],
-                                    className="table__container",
+                                    className="app_container",
                                 ),
                             ],
                         ),
+
                     ],
                 )
             ],
             className="tabs__container",
         ),
+
+        html.Footer(dbc.Row([
+                dbc.Col(html.Img(src="assets/logo_wagon.png", className="app__logo"), width=10),
+                dbc.Col(html.H4("My PREDICTION SUBMISSION", className="header__text"), width=2, align='right')])),
+
     ],
     className="app__container",
 )
+
 
 # @app.callback
 @app.callback(
