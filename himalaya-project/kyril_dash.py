@@ -262,7 +262,8 @@ app.layout = html.Div([
             color={"gradient":True,"ranges":{"red":[0,40],"yellow":[40,60],"green":[60,100]}},
             min=0,
             max=100,
-            value=0
+            value=0,
+            showCurrentValue=True
         )
     ])
 ])
