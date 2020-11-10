@@ -64,7 +64,7 @@ app.layout = html.Div([
                     )
                 ])),
 
-            dbc.Col(html.Div([html.P("Moutain and Route:",className="input__heading"),
+            dbc.Col(html.Div([html.P("Mountain and Route:",className="input__heading"),
                 dcc.Dropdown(
                     id="select-mountain",
                     options=options_peaks,
