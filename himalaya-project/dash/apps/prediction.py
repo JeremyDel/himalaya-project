@@ -500,7 +500,7 @@ def dataframe_predict(submit_entry, mountain, host, days, camps, rope, total_mem
         if prediction[0][2] == 1:
             return f"This person will succeed the expedition with a {round(100*prediction[0][1], 2)}% chance"
         if prediction[0][2] == 0:
-            return f"Unfortunately this person will most likely fail the expedition with a {round(100*prediction[0][1], 2)}% chance"
+            return f"Unfortunately this person will most likely fail the expedition with a {round(100*prediction[0][0], 2)}% chance"
         raise dash.exceptions.PreventUpdate
 
 
