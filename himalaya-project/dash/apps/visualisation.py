@@ -49,47 +49,51 @@ mylist = df.peak_name.unique()
 peak_list = pd.DataFrame({'peak' : mylist})
 season_list = ['Spring', 'Summer', 'Autumn', 'Winter', 'All']
 
-years = {i : str(i) for i in range(df.year.min(), df.year.max()+1)}
-years.update({df.year.max()+1 : 'All'})
-
+years = [{'label':i, 'value' : str(i)} for i in range(df.year.min(), df.year.max()+1)]
+years.append({'label' : df.year.max()+1, 'value' : 'All'})
 
 # ------------------------------------------------------------------------------
 # return to current working directory
 
 # ------------------------------------------------------------------------------
 # App layout
-
 layout = html.Div([
     dbc.Container([
 
-        dcc.Dropdown(
-            id='input_peak',
-            options=[{'label':i, 'value':i} for i in peak_list['peak']],
-            value='Everest'
-        ),
+        html.Br(),
 
-        dcc.Slider(
-            id='input_year',
-            min=df.year.min(),
-            max=df.year.max(),
-            step=None,
-            marks={i : str(i) for i in range(df.year.min(), df.year.max()+1)},
-            value=df.year.max()
-        ),
+        html.Br(),
 
-        daq.Slider(
-            min=0,
-            max=100,
-            value=df.year.max(),
-            marks={i : str(i) for i in range(df.year.min(), df.year.max()+1)},
-            size=265
-        ),
+        dbc.Row([
 
-        dcc.RadioItems(
-            id='input_season',
-            options=[{'label' : i, 'value' : str(i)} for i in season_list],
-            value='All'
-        ),
+                dbc.Col(
+                    dcc.Dropdown(
+                        id='input_peak',
+                        options=[{'label':i, 'value':i} for i in peak_list['peak']],
+                        value='Everest'
+                        )
+                    ),
+
+                dbc.Col(
+                    daq.Slider(
+                        id='input_year',
+                        min=df.year.min(),
+                        max=df.year.max(),
+                        value=df.year.max(),
+                        handleLabel={"showCurrentValue": True,"label": "YEAR"},
+                        )
+                    ),
+
+                dbc.Col(
+                    dcc.RadioItems(
+                        id='input_season',
+                        options=[{'label' : i, 'value' : str(i)} for i in season_list],
+                        value='Spring'
+                        )
+                    )
+        ]),
+
+        html.Br(),
 
 # Peak Section # ---------------------------------------------------------------
         dbc.Row([
