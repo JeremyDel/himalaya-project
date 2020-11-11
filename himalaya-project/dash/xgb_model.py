@@ -17,14 +17,14 @@ class HimalXGB():
 
         # load the pipeline & the model
 
-        model = joblib.load('/assets/XGB_model.joblib')
-        print(f'MODEL--------------- {model}---------------')
+        model = joblib.load('assets/XGB_model.joblib')
+        # print(f'MODEL--------------- {model}---------------')
 
-        pipe = joblib.load("/assets/pipe_transformation.joblib")
-        print(f'MODEL--------------- {pipe}---------------')
+        pipe = joblib.load('assets/pipe_transformation.joblib')
+        # print(f'MODEL--------------- {pipe}---------------')
 
         X = pipe.transform(df)
-        print(f'MODEL--------------- {X}---------------')
+        # print(f'MODEL--------------- {X}---------------')
 
         a = model.predict_proba(X)
         b = model.predict(X)
