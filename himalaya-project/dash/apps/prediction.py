@@ -13,6 +13,7 @@ from app import app
 from dash.dependencies import Input, Output, State
 import os
 import sys
+import requests
 
 # root_dir = os.path.abspath('')
 # path_list = root_dir.split(os.sep)
@@ -359,11 +360,15 @@ def dataframe_predict(submit_entry, mountain, host, days, camps, rope, total_mem
        'sex_M': int(sex), 'status': status, 'age': int(age), 'cumul_snow':43}, ignore_index=True)
 
         # os.chdir(himalaya_path)
+        json = to_predict.to_dict(orient="records")
+        api_url = "https://himalapi.herokuapp.com/"
+        response = requests.get(api_url+"predict_success", json=json).json()
 
-        prediction = HimalXGB().predict_model(to_predict)
-        # os.chdir(root_dir)
+        return 100*response['predictions']
+        # prediction = HimalXGB().predict_model(to_predict)
+        # # os.chdir(root_dir)
 
-        return round(prediction[0][1]*100)
+        # return round(prediction[0][1]*100)
 
 
 

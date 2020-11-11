@@ -74,7 +74,9 @@ layout = html.Div([
                 dbc.Row([
                   dbc.Col(html.Div(children=[html.Img(src='assets/wagon.png', height='100px')], style= {'border-radius': '100px'}), width=3),
 
-                        dbc.Col(html.P("The dataset comes from Elizabeth Hawley. She was an American journalist, author, and chronicler of Himalayan mountaineering expeditions. Hawley's The Himalayan Database became the unofficial record for climbs in the Himalaya"),
+                        dbc.Col(html.P("We started this project as we were doing our bootcamp at Le Wagon Brussels.\
+                          during this bootcamp we learned how to use data science tools, this project aims at showing of our skills\
+                           learned during this bootcamp"),
                           align='center', width=9)
 
 
