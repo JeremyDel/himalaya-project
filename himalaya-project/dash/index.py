@@ -14,8 +14,8 @@ from apps import home, prediction, visualisation
 dropdown = dbc.DropdownMenu(
     children=[
         dbc.DropdownMenuItem("Home", href="/home"),
-        dbc.DropdownMenuItem("Global", href="/visualisation"),
-        dbc.DropdownMenuItem("prediction", href="/prediction"),
+        dbc.DropdownMenuItem("Visualisation", href="/visualisation"),
+        dbc.DropdownMenuItem("Prediction", href="/prediction"),
     ],
     nav = True,
     in_navbar = True,

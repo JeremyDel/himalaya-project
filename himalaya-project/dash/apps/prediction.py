@@ -14,17 +14,18 @@ from dash.dependencies import Input, Output, State
 import os
 import sys
 
-root_dir = os.path.abspath('')
-path_list = root_dir.split(os.sep)
-himalaya_path =path_list[:-1]
-himalaya_path = "\\".join(himalaya_path)
+# root_dir = os.path.abspath('')
+# path_list = root_dir.split(os.sep)
+# himalaya_path =path_list[:-1]
+# himalaya_path = "\\".join(himalaya_path)
 
-sys.path.insert(0, himalaya_path)
+# sys.path.insert(0, himalaya_path)
 
 from xgb_model import HimalXGB
-from data import Data
-from weather import Weather
-from peaks import Peaks
+
+# from data import Data
+# from weather import Weather
+# from peaks import Peaks
 
 # ------------------------------------------------------------------------------
 # changing working directory to import data
@@ -354,10 +355,10 @@ def dataframe_predict(submit_entry, mountain, host, days, camps, rope, total_mem
        'visibility':7.486308, 'winddirDegree':211.464793, 'windspeedKmph': 10.086931, 'stability': 0.045808, 'season' :season,
        'sex_M': int(sex), 'status': status, 'age': int(age), 'cumul_snow':43}, ignore_index=True)
 
-        os.chdir(himalaya_path)
+        # os.chdir(himalaya_path)
 
         prediction = HimalXGB().predict_model(to_predict)
-        os.chdir(root_dir)
+        # os.chdir(root_dir)
 
         return round(prediction[0][1]*100)
 

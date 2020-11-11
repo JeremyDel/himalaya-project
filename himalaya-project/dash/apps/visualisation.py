@@ -17,30 +17,30 @@ from app import app
 
 # ------------------------------------------------------------------------------
 # changing working directory to import data
-import os
-import sys
+# import os
+# import sys
 
 
-root_dir = os.path.abspath('')
-path_list = root_dir.split(os.sep)
+# root_dir = os.path.abspath('')
+# path_list = root_dir.split(os.sep)
 
-himalaya_path =path_list[:-1]
-# assets_path =path_list[:-1]
-himalaya_path = "\\".join(himalaya_path)
-# assets_path= "\\".join(assets_path)
+# himalaya_path =path_list[:-1]
+# # assets_path =path_list[:-1]
+# himalaya_path = "\\".join(himalaya_path)
+# # assets_path= "\\".join(assets_path)
 
-sys.path.insert(0, himalaya_path)
+# sys.path.insert(0, himalaya_path)
 
-from weather import Weather
-os.chdir(himalaya_path)
+# from weather import Weather
+# os.chdir(himalaya_path)
 
-weather = Weather().get_data()
-weather = Weather().clean_data(weather)
+weather = pd.read_csv('assets/weather_clean.csv')
+weather['date_time'] = pd.to_datetime(weather['date_time'])
 
 # ------------------------------------------------------------------------------
 # Import and clean data (importing csv into pandas)
-os.chdir(root_dir)
-print(os.getcwd())
+# os.chdir(root_dir)
+
 
 df = pd.read_csv('assets/matching_table.csv')
 df['summit_date'] = pd.to_datetime(df['summit_date'])
@@ -248,11 +248,11 @@ def update_text(peak, year, season):
 
     return alt, climb, rate
 
-@app.callback(Output('peak_attempts', 'figure'),
-                Output('peak_death', 'figure'),
-                [Input('input_peak', 'value')],
-                [Input('input_year', 'value')],
-                [Input('input_season', 'value')]
+@app.callback([Output('peak_attempts', 'figure'),
+                Output('peak_death', 'figure')],
+                [Input('input_peak', 'value'),
+                Input('input_year', 'value'),
+                Input('input_season', 'value')]
                 )
 
 def update_peak(peak, year, season):
@@ -322,13 +322,13 @@ def update_peak(peak, year, season):
     return fig, fig2
 
 # Expeditions & Members callback # ---------------------------------------------
-@app.callback(Output('exp_countries', 'figure'),
+@app.callback([Output('exp_countries', 'figure'),
                 Output('exp_success', 'figure'),
                 Output('exp_death', 'figure'),
-                Output('exp_term', 'figure'),
-                [Input('input_peak', 'value')],
-                [Input('input_year', 'value')],
-                [Input('input_season', 'value')])
+                Output('exp_term', 'figure')],
+                [Input('input_peak', 'value'),
+                Input('input_year', 'value'),
+                Input('input_season', 'value')])
 
 def update_exp(peak, year, season):
 
@@ -414,10 +414,10 @@ def update_exp(peak, year, season):
     return fig, fig1, fig2, fig3
 
 # Weather callback # -----------------------------------------------------------
-@app.callback(Output('weather_temp', 'figure'),
-                Output('weather_snow', 'figure'),
-                [Input('input_year', 'value')],
-                [Input('input_season', 'value')])
+@app.callback([Output('weather_temp', 'figure'),
+                Output('weather_snow', 'figure')],
+                [Input('input_year', 'value'),
+                Input('input_season', 'value')])
 
 def update_exp(year, season):
 
