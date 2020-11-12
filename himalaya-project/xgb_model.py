@@ -73,6 +73,7 @@ class HimalXGB():
         df = df.rename(columns={'index' : 'summit_date'})
         df = df.merge(member, on='exp_id', how = 'right')
         df = df.dropna(subset=['summit_date', 'bc_date'])
+        df.drop('date_season', axis=1, inplace=True)
 
         # Feature Engineering (2/2)
         df['cumul_snow'] = 0
@@ -132,6 +133,9 @@ class HimalXGB():
         # Save trained model
         model_name = 'XGB_model.joblib'
         joblib.dump(boost, model_name)
+
+        pipe_name = "pipe_transformation.joblib"
+        joblib.dump(pipeline, pipe_name)
 
         # Export pipeline as pickle file
         with open("pipeline.pkl", "wb") as file:

@@ -74,7 +74,9 @@ layout = html.Div([
                 dbc.Row([
                   dbc.Col(html.Div(children=[html.Img(src='assets/wagon.png', height='100px')], style= {'border-radius': '100px'}), width=3),
 
-                        dbc.Col(html.P("The dataset comes from Elizabeth Hawley. She was an American journalist, author, and chronicler of Himalayan mountaineering expeditions. Hawley's The Himalayan Database became the unofficial record for climbs in the Himalaya"),
+                        dbc.Col(html.P("We started this project as we were doing our bootcamp at Le Wagon Brussels.\
+                          during this bootcamp we learned how to use data science tools, this project aims at showing of our skills\
+                           learned during this bootcamp"),
                           align='center', width=9)
 
 
@@ -90,7 +92,7 @@ layout = html.Div([
      html.Div(style={
               'background-color': '#2C2F33',
               'background-repeat': 'no-repeat',
-              'height': '450px',
+              'height': '700px',
               'background-position':'center',
               'position': 'relative',
               'background-size': 'cover',
@@ -110,51 +112,49 @@ layout = html.Div([
               html.Br(),
               html.Br(),
 
-              dbc.Container([dbc.Row([
+              dbc.Container([dbc.CardDeck([
 
-                dbc.Col(dbc.Card([
+                dbc.Card([
 
                   dbc.CardImg(src="assets/kyril.jpg", top=True),
                   dbc.CardBody(children =[
                     html.H5(children='Kyril', className="text-center"),
-                      html.Div(children="Kyril sucks at climbing rocks", className="card-text")]
+                      html.Div(children="Kyril is our lead climber. Passionate about climbing and alpinism he came with the crazy idea\
+                        of applying machine learning models to himalaya expeditions. His past experience as a data scientist\
+                        helped the team further their skills.", className="card-text")]
                   ),
-                ])
+                ]),
 
-                    , width=3, className="mb-4"),
-
-                dbc.Col(dbc.Card([
+                dbc.Card([
 
                   dbc.CardImg(src="assets/jerem.jpg", top=True),
                   dbc.CardBody(children =[
                     html.H5(children='Jeremy', className="text-center"),
-                      html.Div(children="Jeremy is the best at climbing rocks", className="card-text")]
+                      html.Div(children="Jeremy is always there to pick up a challenge and find crazy ideas and bringing a solution to the table.\
+                        He's not used to take the Standard Route to the top and he'll get you there by taking shortcuts.", className="card-text")]
                   ),
-                ])
-
-                , width=3, className="mb-4"),
+                ]),
 
 
-                dbc.Col(dbc.Card([
+                dbc.Card([
 
                   dbc.CardImg(src="assets/wafaa.jpg", top=True),
                   dbc.CardBody(children =[
                     html.H5(children='Wafaa', className="text-center"),
-                      html.Div(children="Wafaa is the best at climbing rocks", className="card-text")]
+                      html.Div(children="Wafaa is the creative driving force of the project. Her visualizations skills helped us get\
+                       through the data.", className="card-text")]
                   ),
-                ])
+                ]),
 
-                    , width=3, className="mb-4"),
-                dbc.Col(dbc.Card([
+                dbc.Card([
 
                   dbc.CardImg(src="assets/nicolas.jpg", top=True),
                   dbc.CardBody(children =[
                     html.H5(children='Nicolas', className="text-center"),
-                      html.Div(children="Nico is the best at climbing rocks", className="card-text")]
+                      html.Div(children="As Swiss, who has lived his whole life up in the mountains, this project suited him very well and didn't\
+                       hesitated one second to pursue Kyril in this wonderful adventure. His knowlegde about alpinism greatly helped to team to further our analysis.", className="card-text")]
                   ),
-                ])
-
-                    , width=3, className="mb-4"),
+                ]),
 
 
 

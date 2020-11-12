@@ -13,18 +13,20 @@ from app import app
 from dash.dependencies import Input, Output, State
 import os
 import sys
+import requests
 
-root_dir = os.path.abspath('')
-path_list = root_dir.split(os.sep)
-himalaya_path =path_list[:-1]
-himalaya_path = "\\".join(himalaya_path)
+# root_dir = os.path.abspath('')
+# path_list = root_dir.split(os.sep)
+# himalaya_path =path_list[:-1]
+# himalaya_path = "\\".join(himalaya_path)
 
-sys.path.insert(0, himalaya_path)
+# sys.path.insert(0, himalaya_path)
 
 from xgb_model import HimalXGB
-from data import Data
-from weather import Weather
-from peaks import Peaks
+
+# from data import Data
+# from weather import Weather
+# from peaks import Peaks
 
 # ------------------------------------------------------------------------------
 # changing working directory to import data
@@ -95,7 +97,7 @@ layout = html.Div([
                         {'label': 'China', 'value': 'China'},
                         {'label': 'India', 'value': 'India'},
                         {'label': 'Other', 'value': 'Unknown'}],
-                        # value="EVER",
+                        value="China",
                         placeholder="Select host country",
                         className="host__select",
                         style={'width': '80%'},
@@ -106,7 +108,7 @@ layout = html.Div([
                 dcc.Dropdown(
                     id="select-mountain",
                     options=options_peaks,
-                    # value="EVER",
+                    value="EVER",
                     placeholder="Select mountain",
                     className="peak__select",
                     style={'width': '80%'},
@@ -124,7 +126,7 @@ layout = html.Div([
                     {'label': 'Summer', 'value': 'Summer'},
                     {'label': 'Spring', 'value': 'Spring'},
                     {'label': 'Autumn', 'value': 'Autumn'}],
-                    # value="EVER",
+                    value="Summer",
                     placeholder="Select season",
                     className="season__select",
                     style={'width': '80%'},
@@ -140,7 +142,7 @@ layout = html.Div([
                     {'label': 'Leader', 'value': 'leader'},
                     {'label': 'Deputy', 'value': 'deputy'},
                     {'label': 'Other', 'value': 'other'}],
-                    # value="EVER",
+                    value="climber",
                     placeholder="Select role in the expedition",
                     className="status__select",
                     style={'width': '80%'},
@@ -156,7 +158,7 @@ layout = html.Div([
                     id="select-comroute",
                     options=[{'label': 'Yes', 'value': 'True'},
                     {'label': 'No', 'value': "False"}],
-                    # value="EVER",
+                    value="True",
                     placeholder="Commercial route? ",
                     className="rope__select",
                     style={'width': '80%'},
@@ -167,7 +169,7 @@ layout = html.Div([
                     id="select-standard",
                     options=[{'label': 'Yes', 'value': 'True'},
                     {'label': 'No', 'value': "False"}],
-                    # value="EVER",
+                    value="True",
                     placeholder="Standard route ?",
                     className="rope__select",
                     style={'width': '80%'},
@@ -183,7 +185,7 @@ layout = html.Div([
                     id="select-hired",
                     options=[{'label': 'Yes', 'value': 'True'},
                     {'label': 'No', 'value': "False"}],
-                    # value="EVER",
+                    value="True",
                     placeholder="Hired people ?",
                     className="hired__select",
                     style={'width': '80%'},
@@ -194,7 +196,7 @@ layout = html.Div([
                     id="select-rope",
                     options=[{'label': 'Yes', 'value': 'True'},
                     {'label': 'No', 'value': "False"}],
-                    # value="EVER",
+                    value="True",
                     placeholder="Fixed ropes ?",
                     className="rope__select",
                     style={'width': '80%'},
@@ -238,6 +240,7 @@ layout = html.Div([
                 dbc.Input(
                     id='input-days',
                     type='number',
+                    value =14,
                     placeholder="Number of days",
                     style={'width': '65%'}
                 )
@@ -246,6 +249,7 @@ layout = html.Div([
                 dbc.Input(
                     id='input-camps',
                     type='number',
+                    value= 5,
                     placeholder="Number of camps",
                     style={'width': '65%'}
                 )
@@ -261,6 +265,7 @@ layout = html.Div([
                     type='number',
                     placeholder="Age of the person",
                     min=16,
+                    value=20,
                     style={'width': '65%'}
                 )
             ])),
@@ -269,7 +274,7 @@ layout = html.Div([
                     id="select-sex",
                     options=[{'label': 'Male', 'value': 1},
                     {'label': 'Female', 'value': 0}],
-                    # value="EVER",
+                    value=1,
                     placeholder="Sex of the person",
                     className="sex__select",
                     style={'width': '80%'},
@@ -354,12 +359,16 @@ def dataframe_predict(submit_entry, mountain, host, days, camps, rope, total_mem
        'visibility':7.486308, 'winddirDegree':211.464793, 'windspeedKmph': 10.086931, 'stability': 0.045808, 'season' :season,
        'sex_M': int(sex), 'status': status, 'age': int(age), 'cumul_snow':43}, ignore_index=True)
 
-        os.chdir(himalaya_path)
+        # os.chdir(himalaya_path)
+        json = to_predict.to_dict(orient="records")
+        api_url = "https://himalapi.herokuapp.com/"
+        response = requests.get(api_url+"predict_success", json=json).json()
 
-        prediction = HimalXGB().predict_model(to_predict)
-        os.chdir(root_dir)
+        return 100*response['predictions']
+        # prediction = HimalXGB().predict_model(to_predict)
+        # # os.chdir(root_dir)
 
-        return round(prediction[0][1]*100)
+        # return round(prediction[0][1]*100)
 
 
 
