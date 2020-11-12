@@ -54,7 +54,7 @@ layout = html.Div([
               html.Br(),
 
               dbc.Container([
-                dbc.Row([dbc.Col(html.Div(children=[html.Img(src='assets/Hawley.jpg', height='100px')], style= {'border-radius': '100px'}), width=3),
+                dbc.Row([dbc.Col(html.Div(children=[html.Img(src='assets/Hawley.png', height='100px')], style= {'border-radius': '100px'}), width=3),
 
                         dbc.Col(html.Div(children=[html.P("The dataset comes from Elizabeth Hawley. She was an American journalist, author, \
                           and chronicler of Himalayan mountaineering expeditions. Hawley's The Himalayan Database became the\
@@ -92,7 +92,7 @@ layout = html.Div([
      html.Div(style={
               'background-color': '#2C2F33',
               'background-repeat': 'no-repeat',
-              'height': '700px',
+              'height': '800px',
               'background-position':'center',
               'position': 'relative',
               'background-size': 'cover',
@@ -141,8 +141,9 @@ layout = html.Div([
                   dbc.CardImg(src="assets/wafaa.jpg", top=True),
                   dbc.CardBody(children =[
                     html.H5(children='Wafaa', className="text-center"),
-                      html.Div(children="Wafaa is the creative driving force of the project. Her visualizations skills helped us get\
-                       through the data.", className="card-text")]
+                      html.Div(children="Wafaa is the creative driving force of the project. Her visualizations and graphic \
+                        design skills helped us get a better understanding of the data, and enhance the design of our presentation.\
+                       Her organization skills also helped us manage our time wisely, and use our cumulative skills wisely.", className="card-text")]
                   ),
                 ]),
 

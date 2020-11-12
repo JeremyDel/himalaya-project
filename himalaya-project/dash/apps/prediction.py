@@ -89,6 +89,7 @@ layout = html.Div([
             ,className="mb-4")
         ]),
 
+        html.Div([
         dbc.Row([
             dbc.Col(html.Div([html.P("Host Country:",className="input__heading"),
                 dcc.Dropdown(
@@ -102,7 +103,7 @@ layout = html.Div([
                         className="host__select",
                         style={'width': '80%'},
                     )
-                ])),
+                ]),width={"size": 6}),
 
             dbc.Col(html.Div([html.P("Mountain and Route:",className="input__heading"),
                 dcc.Dropdown(
@@ -113,7 +114,7 @@ layout = html.Div([
                     className="peak__select",
                     style={'width': '80%'},
                 )
-            ]))
+            ]),width={"size": 6})
         ]),
 
         html.Br(),
@@ -205,11 +206,10 @@ layout = html.Div([
         ]),
 
         html.Br(),
-        html.Br(),
-        html.Br(),
 
         dbc.Row([
             dbc.Col(html.Div([html.P("Number of climbers:",className="input__heading"),
+                html.Br(),
                 daq.Slider(
                     id='slider-total',
                     min=0,
@@ -221,6 +221,7 @@ layout = html.Div([
                 )
             ])),
             dbc.Col(html.Div([html.P("Number of sherpas:",className="input__heading"),
+                html.Br(),
                 daq.Slider(
                     id='slider-hired',
                     min=0,
@@ -280,7 +281,8 @@ layout = html.Div([
                     style={'width': '80%'},
                 )
             ]))
-        ]),
+        ]),] , style={'margin-bottom': '10px',
+              'margin-left':'150px'}),
 
         html.Br(),
         html.Br(),
@@ -292,7 +294,7 @@ layout = html.Div([
                 buttonText='Calcul Prediction',
                 className="submit__button"
             ),
-        ]),
+        ], style={'transform': 'translate(45%, 0)'}),
 
         html.Br(),
         html.Br(),
