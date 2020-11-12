@@ -27,7 +27,7 @@ class Expeds(object):
 
         df = df.copy()
 
-        ## defining some definitions for the cleaning 
+        ## defining some definitions for the cleaning
         def numbers(x):
             if type(x) == str:
                 return int(re.findall(r"\d*", x)[0])
@@ -39,17 +39,17 @@ class Expeds(object):
             return True
 
         def no_sponsor(x):
-            if x == float('nan'): 
+            if x == float('nan'):
                 return False
             return x
 
         def no_route(x):
-            if x == float('nan'): 
-                return 'other' 
+            if x == float('nan'):
+                return 'other'
             return x
 
 
-        ## Applying functions to the specific columns    
+        ## Applying functions to the specific columns
         df['ascent1'].fillna(0, inplace=True)
         df['ascent1'] = df['ascent1'].map(numbers)
 
@@ -59,7 +59,7 @@ class Expeds(object):
         df['achievment'].fillna(0, inplace=True)
         df['achievment'] = df['achievment'].map(true)
 
-        
+
 
         df['term_reason'] = df['term_reason'].map({
             0 : 'Unknown',
@@ -78,22 +78,22 @@ class Expeds(object):
             13 : 'Attempt_rumored',
             14 : "Other"})
 
-        
+
         df['sponsor'].fillna('None', inplace=True)
         df['agency'].fillna('None', inplace=True)
 
-        ## dropping 
-        df.drop(columns=['route3', 'route4', 
-        'ascent2', 
-        'ascent4', 
+        ## dropping
+        df.drop(columns=['route3', 'route4',
+        'ascent2',
+        'ascent4',
         'ascent3',
-        'approach', 
-        'primref', 
+        'approach',
+        'primref',
         'primid',
-        'chksum', 
+        'chksum',
         'success3',
         'success4'],  inplace = True)
-                
+
         ## Filling with zeros because its makes sense
         df['summit_time'].fillna(0, inplace=True)
         df['other_smts'].fillna(0, inplace=True)
@@ -110,7 +110,7 @@ class Expeds(object):
             1 : 'Nepal',
             2 : 'China',
             3 : 'India'})
-        
+
         df['summit_time'] = df['summit_time'].astype(int)
 
         return df

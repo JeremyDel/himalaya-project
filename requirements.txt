@@ -22,3 +22,5 @@ gensim
 xlrd
 wwo_hist
 tensorflow
+statsmodels==0.11.1
+pmdarima
