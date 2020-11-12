@@ -45,10 +45,29 @@ options_peaks = []
 for i , row in peak.iterrows():
     options_peaks.append({'label':row['peak_name'], 'value': row['peak_id']})
 
+url_fatmap = "https://fatmap.com/@27.9880482,86.9248308,11734.4882324,-23.9999999,0,8620.6107686,normal"
 # ------------------------------------------------------------------------------
 # defining layout
 app.layout = html.Div([
     dbc.Container([
+
+        html.Br(),
+        html.Br(),
+
+        html.Div(html.Iframe(src= url_fatmap,
+                        style={'border': 'none', 'width': '100%', 'height': 500})),
+
+        html.Br(),
+
+        dbc.Row([
+            dbc.Col(
+                dbc.Card(
+                    html.H3(children='Are you gonna reach the summit ?',
+                                     className="text-center text-light bg-dark"),
+                    body=True, color="dark")
+            ,className="mb-4")
+        ]),
+
         dbc.Row([
             dbc.Col(html.Div([html.P("Host Country:",className="input__heading"),
                 dcc.Dropdown(
@@ -264,7 +283,8 @@ app.layout = html.Div([
             max=100,
             value=0,
             showCurrentValue=True
-        )
+        ),
+
     ])
 ])
 
@@ -319,7 +339,6 @@ def dataframe_predict(submit_entry, mountain, host, days, camps, rope, total_mem
         prediction = HimalXGB().predict_model(to_predict)
 
         return round(prediction[0][1]*100)
-
 
 __name__ == '__main__'
 app.run_server(debug=True)
