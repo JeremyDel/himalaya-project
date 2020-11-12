@@ -106,23 +106,29 @@ class HimalXGB():
 
         col_bool.remove('summit_success')
 
-        numeric_transformer = make_pipeline(SimpleImputer(), MinMaxScaler())
+        numeric_transformer = Pipeline(steps=[
+            ('imputer', SimpleImputer()),
+            ('scaler', MinMaxScaler())])
 
-        categorical_transformer = make_pipeline(SimpleImputer(strategy='most_frequent'),
-                                                OneHotEncoder(drop= 'first', handle_unknown='error'))
-        feateng_blocks = [
-                    ('num', numeric_transformer, col_num),
-                    ('cat', categorical_transformer, col_object),
-                ]
-        features_encoder = ColumnTransformer(feateng_blocks, n_jobs=None, remainder="passthrough")
+        categorical_transformer = Pipeline(steps=[
+            ('imputer', SimpleImputer(strategy='most_frequent')),
+            ('onehot', OneHotEncoder(drop= 'first', handle_unknown='error'))])
 
-        pipeline = Pipeline([
-                    ('features', features_encoder)])
+        preprocessor = ColumnTransformer(
+            transformers=[
+                ('num', numeric_transformer, col_num),
+                ('cat', categorical_transformer, col_object)], remainder="passthrough")
+
+        pipeline = Pipeline(steps=[('preprocessor', preprocessor)])
 
         X = df.drop(columns=['summit_success'])
         X = pipeline.fit_transform(X)
-
         y = df.summit_success
+
+        col_cat_names = list(pipeline.named_steps["preprocessor"].transformers_[1][1]\
+            .named_steps['onehot'].get_feature_names(col_object))
+
+        feat_name = col_num + col_cat_names + col_bool
 
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size= 0.3, random_state= 1)
 
