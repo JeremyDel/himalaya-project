@@ -6,6 +6,7 @@ import dash_core_components as dcc
 import dash_bootstrap_components as dbc
 import dash_daq as daq
 import dash_html_components as html
+from dash import no_update
 from dash.dependencies import Input, Output, State
 from data import Data
 from weather import Weather
@@ -133,6 +134,7 @@ app.layout = html.Div([
             ,className="mb-4")
         ]),
 
+        html.Div([
         dbc.Row([
             dbc.Col(html.Div([html.P("Host Country:",className="input__heading"),
                 dcc.Dropdown(
@@ -141,23 +143,23 @@ app.layout = html.Div([
                         {'label': 'China', 'value': 'China'},
                         {'label': 'India', 'value': 'India'},
                         {'label': 'Other', 'value': 'Unknown'}],
-                        # value="EVER",
+                        value="China",
                         placeholder="Select host country",
                         className="host__select",
                         style={'width': '80%'},
                     )
-                ])),
+                ]),width={"size": 6}),
 
             dbc.Col(html.Div([html.P("Mountain and Route:",className="input__heading"),
                 dcc.Dropdown(
                     id="select-mountain",
                     options=options_peaks,
-                    # value="EVER",
+                    value="EVER",
                     placeholder="Select mountain",
                     className="peak__select",
                     style={'width': '80%'},
                 )
-            ]))
+            ]),width={"size": 6})
         ]),
 
         html.Br(),
@@ -170,7 +172,7 @@ app.layout = html.Div([
                     {'label': 'Summer', 'value': 'Summer'},
                     {'label': 'Spring', 'value': 'Spring'},
                     {'label': 'Autumn', 'value': 'Autumn'}],
-                    # value="EVER",
+                    value="Summer",
                     placeholder="Select season",
                     className="season__select",
                     style={'width': '80%'},
@@ -186,8 +188,8 @@ app.layout = html.Div([
                     {'label': 'Leader', 'value': 'leader'},
                     {'label': 'Deputy', 'value': 'deputy'},
                     {'label': 'Other', 'value': 'other'}],
-                    # value="EVER",
-                    placeholder="Select role in the expedition.",
+                    value="climber",
+                    placeholder="Select role in the expedition",
                     className="status__select",
                     style={'width': '80%'},
                 )
@@ -202,7 +204,7 @@ app.layout = html.Div([
                     id="select-comroute",
                     options=[{'label': 'Yes', 'value': 'True'},
                     {'label': 'No', 'value': "False"}],
-                    # value="EVER",
+                    value="True",
                     placeholder="Commercial route? ",
                     className="rope__select",
                     style={'width': '80%'},
@@ -213,7 +215,7 @@ app.layout = html.Div([
                     id="select-standard",
                     options=[{'label': 'Yes', 'value': 'True'},
                     {'label': 'No', 'value': "False"}],
-                    # value="EVER",
+                    value="True",
                     placeholder="Standard route ?",
                     className="rope__select",
                     style={'width': '80%'},
@@ -229,18 +231,18 @@ app.layout = html.Div([
                     id="select-hired",
                     options=[{'label': 'Yes', 'value': 'True'},
                     {'label': 'No', 'value': "False"}],
-                    # value="EVER",
+                    value="True",
                     placeholder="Hired people ?",
                     className="hired__select",
                     style={'width': '80%'},
                 )
             ])),
-            dbc.Col(html.Div([html.P("Fixed Rope:",className="input__heading"),
+            dbc.Col(html.Div([html.P("Fixed Ropes:",className="input__heading"),
                 dcc.Dropdown(
                     id="select-rope",
                     options=[{'label': 'Yes', 'value': 'True'},
                     {'label': 'No', 'value': "False"}],
-                    # value="EVER",
+                    value="True",
                     placeholder="Fixed ropes ?",
                     className="rope__select",
                     style={'width': '80%'},
@@ -249,11 +251,10 @@ app.layout = html.Div([
         ]),
 
         html.Br(),
-        html.Br(),
-        html.Br(),
 
         dbc.Row([
             dbc.Col(html.Div([html.P("Number of climbers:",className="input__heading"),
+                html.Br(),
                 daq.Slider(
                     id='slider-total',
                     min=0,
@@ -265,6 +266,7 @@ app.layout = html.Div([
                 )
             ])),
             dbc.Col(html.Div([html.P("Number of sherpas:",className="input__heading"),
+                html.Br(),
                 daq.Slider(
                     id='slider-hired',
                     min=0,
@@ -284,6 +286,7 @@ app.layout = html.Div([
                 dbc.Input(
                     id='input-days',
                     type='number',
+                    value =14,
                     placeholder="Number of days",
                     style={'width': '65%'}
                 )
@@ -292,6 +295,7 @@ app.layout = html.Div([
                 dbc.Input(
                     id='input-camps',
                     type='number',
+                    value= 5,
                     placeholder="Number of camps",
                     style={'width': '65%'}
                 )
@@ -307,6 +311,7 @@ app.layout = html.Div([
                     type='number',
                     placeholder="Age of the person",
                     min=16,
+                    value=20,
                     style={'width': '65%'}
                 )
             ])),
@@ -315,13 +320,14 @@ app.layout = html.Div([
                     id="select-sex",
                     options=[{'label': 'Male', 'value': 1},
                     {'label': 'Female', 'value': 0}],
-                    # value="EVER",
+                    value=1,
                     placeholder="Sex of the person",
                     className="sex__select",
                     style={'width': '80%'},
                 )
             ]))
-        ]),
+        ]),] , style={'margin-bottom': '10px',
+              'margin-left':'150px'}),
 
         html.Br(),
         html.Br(),
@@ -333,13 +339,12 @@ app.layout = html.Div([
                 buttonText='Calcul Prediction',
                 className="submit__button"
             ),
-        ]),
+        ], style={'transform': 'translate(45%, 0)'}),
 
         html.Br(),
         html.Br(),
         html.Br(),
         html.Br(),
-
         dbc.Row([
             html.H5(children="Score", className="text-center"),
         ], justify="center", align="center"),
@@ -454,6 +459,8 @@ def dataframe_predict(submit_entry, mountain, host, days, camps, rope, total_mem
             margin=dict(t=20))
 
         return pred, fig
+    else:
+        return (no_update, no_update)
 
 
 __name__ == '__main__'

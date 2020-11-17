@@ -56,27 +56,27 @@ layout = html.Div([
               dbc.Container([
                 dbc.Row([dbc.Col(html.Div(children=[html.Img(src='assets/Hawley.png', height='100px')], style= {'border-radius': '100px'}), width=3),
 
-                        dbc.Col(html.Div(children=[html.P("The dataset comes from Elizabeth Hawley. She was an American journalist, author, \
-                          and chronicler of Himalayan mountaineering expeditions. Hawley's The Himalayan Database became the\
-                          unofficial record for climbs in the Himalaya")]), align='center',
-                          width=9)
-
-
-
+                        dbc.Col(html.Div(children=[html.P("Elizabeth Hawley was an American journalist, author, and chronicler of Himalayan\
+                         mountaineering expeditions. Hawley’s Himalayan Database became the unofficial record for climbs in the Himalayas.\
+                          Today Elizabeth’s records have been compiled and published online.\
+                        Her findings are compromised in three tables, peaks, expeditions, and members. In each of these tables detailed information about each \
+                        member’s experience climbing a summit is provided. We are mostly interested in investigating what factors lead to a success or \
+                        failure during each expeditions")]), align='center',width=9)
 
                 ]),
 
-                html.Br(),
-                html.Br(),
                 html.Br(),
                 html.Br(),
 
                 dbc.Row([
                   dbc.Col(html.Div(children=[html.Img(src='assets/wagon.png', height='100px')], style= {'border-radius': '100px'}), width=3),
 
-                        dbc.Col(html.P("We started this project as we were doing our bootcamp at Le Wagon Brussels.\
-                          during this bootcamp we learned how to use data science tools, this project aims at showing of our skills\
-                           learned during this bootcamp"),
+                        dbc.Col(html.P("This project was executed to fulfill our curriculum at Le Wagon’s Data Science bootcamp.\
+                         The aim of this project is to code a machine learning model that will predict the probability of success a \
+                         person has of reaching a certain summit. It was a great pleasure to work on this project as we were able \
+                         to apply all the skills we learned during this intensive program.  We can see that  this tool is truly powerful \
+                         and we hope that it could be beneficial for expedition agencies, or any individual who wants to embark on a \
+                         journey to the summit."),
                           align='center', width=9)
 
 
